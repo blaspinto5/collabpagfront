@@ -17,7 +17,7 @@ const StatsSection = () => {
   return (
     <section className="py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16">
-        <div className="glass rounded-2xl p-6 md:p-10">
+        <div className="glass rounded-2xl p-5 sm:p-6 md:p-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
             {stats.map((stat, index) => (
               <StatCard key={index} {...stat} />

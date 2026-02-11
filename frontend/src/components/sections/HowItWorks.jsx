@@ -69,7 +69,7 @@ const StepCard = memo(({ item, isLast }) => {
       )}
       
       {/* Card */}
-      <div className="glass rounded-2xl p-6 md:p-8 text-center h-full transition-all duration-300 hover:border-gold/30 hover:-translate-y-1">
+      <div className="glass rounded-2xl p-5 sm:p-6 md:p-8 text-center h-full transition-all duration-300 hover:border-gold/30 hover:-translate-y-1">
         {/* Icon */}
         <div className={`relative w-16 h-16 md:w-20 md:h-20 rounded-xl bg-gradient-to-br ${item.color} mx-auto mb-5 flex items-center justify-center group-hover:scale-105 transition-transform shadow-xl`}>
           <Icon size={28} className="text-primary-dark" />
