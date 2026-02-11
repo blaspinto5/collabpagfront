@@ -65,8 +65,8 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen pt-24 pb-16">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>

@@ -28,7 +28,7 @@ const HeroSection = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 lg:px-16 text-center">
         
         {/* Logo with glow */}
         <div className="mb-8 md:mb-10">

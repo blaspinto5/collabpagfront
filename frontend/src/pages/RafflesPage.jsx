@@ -26,7 +26,7 @@ const RafflesPage = () => {
 
   return (
     <div className="min-h-screen py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <span className="inline-block px-5 py-2 rounded-full bg-gold/10 border border-gold/20 text-gold text-xs font-bold uppercase tracking-widest mb-6">

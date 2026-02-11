@@ -23,12 +23,12 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-[#0f172a]/90 backdrop-blur-xl border-b border-white/5">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16">
+        <div className="h-16 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-4">
-            <img src="/logo.png" alt="Logo" className="h-14 w-auto object-contain" />
-            <span className="text-gold font-bold text-2xl hidden sm:block tracking-tight">
+          <Link to="/" className="flex items-center gap-3">
+            <img src="/logo.png" alt="Logo" className="h-10 w-auto object-contain" />
+            <span className="text-gold font-bold text-lg hidden sm:block tracking-tight">
               Sorteando Weas
             </span>
           </Link>
@@ -64,7 +64,7 @@ const Navbar = () => {
         {/* Mobile Nav */}
         {isOpen && (
           <div className="md:hidden py-4 border-t border-white/5 bg-[#0f172a]/95 backdrop-blur-md">
-            <div className="max-w-7xl mx-auto px-6">
+            <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16">
               {navLinks.map(({ path, label, icon: Icon }) => (
                 <Link
                   key={path}

@@ -8,7 +8,7 @@ import { CheckCircle, Home, Mail, Ticket } from 'lucide-react';
 
 const PaymentSuccessPage = () => {
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4 flex items-center justify-center">
+    <div className="min-h-screen pt-24 pb-16 px-6 md:px-10 lg:px-16 flex items-center justify-center">
       <div className="max-w-lg w-full text-center">
         <div className="glass rounded-2xl p-8">
           {/* Success Icon */}

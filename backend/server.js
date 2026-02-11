@@ -16,12 +16,24 @@ const { notFound, errorHandler } = require('./src/middleware/errorHandler');
 
 const app = express();
 
-// Security middleware
-app.use(helmet());
+// Security middleware - allow external images
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "blob:", "https:", "http:"],
+      connectSrc: ["'self'", "https:", "http:"],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+}));
 
 // CORS configuration
 app.use(cors({
-  origin: config.corsOrigin,
+  origin: true,
   credentials: true
 }));
 
@@ -44,6 +56,22 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api', apiRoutes);
+
+// Serve frontend in production
+const publicPath = path.join(__dirname, 'public');
+const fs = require('fs');
+if (fs.existsSync(path.join(publicPath, 'index.html'))) {
+  console.log('📦 Serving static files from /public');
+  app.use(express.static(publicPath));
+  
+  // Handle SPA routing - send all non-API requests to index.html
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path === '/health') {
+      return next();
+    }
+    res.sendFile(path.join(publicPath, 'index.html'));
+  });
+}
 
 // Error handling
 app.use(notFound);

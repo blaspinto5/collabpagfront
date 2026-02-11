@@ -42,8 +42,8 @@ const RaffleDetailPage = () => {
 
   if (error || !raffle) {
     return (
-      <div className="min-h-screen pt-24 pb-16 px-4">
-        <div className="max-w-3xl mx-auto text-center">
+      <div className="min-h-screen pt-24 pb-16">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 text-center">
           <AlertTriangle size={64} className="text-red-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-white mb-2">Sorteo no encontrado</h1>
           <p className="text-slate-400 mb-6">{error || 'El sorteo que buscas no existe o ya no está disponible.'}</p>
@@ -61,8 +61,8 @@ const RaffleDetailPage = () => {
   const isExpiringSoon = new Date(raffle.endDate) - new Date() < 3 * 24 * 60 * 60 * 1000;
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen pt-24 pb-16">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16">
         {/* Back Button */}
         <Link 
           to="/sorteos" 

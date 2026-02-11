@@ -25,7 +25,7 @@ const FeaturedRaffles = ({ raffles, loading, error }) => {
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
       <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-8 sm:px-10 lg:px-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 lg:px-16">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-gold/10 border border-gold/20 mb-6">
