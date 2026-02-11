@@ -1,0 +1,242 @@
+/**
+ * Admin Page
+ * Dashboard for managing raffles and purchases
+ */
+
+import { useState } from 'react';
+import { StatsDashboard, TableRowSkeleton } from '../components';
+import { usePurchases, useRaffles } from '../hooks';
+import { 
+  LayoutDashboard, 
+  Ticket, 
+  Users, 
+  CheckCircle,
+  XCircle,
+  Clock,
+  RefreshCw,
+  Eye
+} from 'lucide-react';
+
+const AdminPage = () => {
+  const [activeTab, setActiveTab] = useState('purchases');
+  const { purchases, loading: purchasesLoading, confirmPurchase, refetch } = usePurchases();
+  const { raffles, loading: rafflesLoading } = useRaffles();
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('es-CL', {
+      style: 'currency',
+      currency: 'CLP',
+      minimumFractionDigits: 0
+    }).format(price || 0);
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('es-CL', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getStatusBadge = (status) => {
+    const styles = {
+      pending: 'bg-yellow-500/20 text-yellow-400',
+      confirmed: 'bg-green-500/20 text-green-400',
+      cancelled: 'bg-red-500/20 text-red-400'
+    };
+    const labels = {
+      pending: 'Pendiente',
+      confirmed: 'Confirmado',
+      cancelled: 'Cancelado'
+    };
+    return (
+      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${styles[status] || styles.pending}`}>
+        {labels[status] || status}
+      </span>
+    );
+  };
+
+  const handleConfirm = async (purchaseId) => {
+    if (window.confirm('¿Confirmar esta compra y asignar números de boleto?')) {
+      await confirmPurchase(purchaseId);
+    }
+  };
+
+  return (
+    <div className="min-h-screen pt-24 pb-16 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <div className="flex items-center gap-2 text-gold mb-2">
+              <LayoutDashboard size={24} />
+            </div>
+            <h1 className="text-3xl font-bold text-white">Panel de Administración</h1>
+            <p className="text-slate-400">Gestiona sorteos y compras</p>
+          </div>
+          <button
+            onClick={() => refetch()}
+            className="btn-secondary flex items-center gap-2"
+          >
+            <RefreshCw size={18} />
+            Actualizar
+          </button>
+        </div>
+
+        {/* Stats Dashboard */}
+        <div className="mb-8">
+          <StatsDashboard />
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-4 mb-6 border-b border-gold/20 pb-4">
+          <button
+            onClick={() => setActiveTab('purchases')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+              activeTab === 'purchases'
+                ? 'bg-gold/20 text-gold'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Users size={18} />
+            Compras
+          </button>
+          <button
+            onClick={() => setActiveTab('raffles')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+              activeTab === 'raffles'
+                ? 'bg-gold/20 text-gold'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Ticket size={18} />
+            Sorteos
+          </button>
+        </div>
+
+        {/* Purchases Tab */}
+        {activeTab === 'purchases' && (
+          <div className="glass rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-primary-dark/50">
+                  <tr>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">ID</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Comprador</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Sorteo</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Boletos</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Total</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Estado</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Fecha</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {purchasesLoading ? (
+                    [...Array(5)].map((_, i) => <TableRowSkeleton key={i} />)
+                  ) : purchases.length > 0 ? (
+                    purchases.map((purchase) => (
+                      <tr key={purchase.id} className="border-t border-gold/10 hover:bg-primary-light/30">
+                        <td className="px-4 py-3 text-slate-300">#{purchase.id}</td>
+                        <td className="px-4 py-3">
+                          <div>
+                            <p className="text-white font-medium">{purchase.buyerName}</p>
+                            <p className="text-slate-400 text-sm">{purchase.buyerEmail}</p>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-slate-300">{purchase.raffleName}</td>
+                        <td className="px-4 py-3 text-cyan font-semibold">{purchase.ticketCount}</td>
+                        <td className="px-4 py-3 text-gold font-semibold">{formatPrice(purchase.total)}</td>
+                        <td className="px-4 py-3">{getStatusBadge(purchase.status)}</td>
+                        <td className="px-4 py-3 text-slate-400 text-sm">{formatDate(purchase.createdAt)}</td>
+                        <td className="px-4 py-3">
+                          <div className="flex gap-2">
+                            {purchase.status === 'pending' && (
+                              <button
+                                onClick={() => handleConfirm(purchase.id)}
+                                className="p-2 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-colors"
+                                title="Confirmar compra"
+                              >
+                                <CheckCircle size={16} />
+                              </button>
+                            )}
+                            <button
+                              className="p-2 rounded-lg bg-cyan/20 text-cyan hover:bg-cyan/30 transition-colors"
+                              title="Ver detalles"
+                            >
+                              <Eye size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="8" className="px-4 py-12 text-center text-slate-400">
+                        No hay compras registradas
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Raffles Tab */}
+        {activeTab === 'raffles' && (
+          <div className="glass rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-primary-dark/50">
+                  <tr>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">ID</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Título</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Categoría</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Precio</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Vendidos</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Total</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Estado</th>
+                    <th className="text-left px-4 py-3 text-slate-400 font-semibold">Fin</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rafflesLoading ? (
+                    [...Array(3)].map((_, i) => <TableRowSkeleton key={i} />)
+                  ) : raffles.length > 0 ? (
+                    raffles.map((raffle) => (
+                      <tr key={raffle.id} className="border-t border-gold/10 hover:bg-primary-light/30">
+                        <td className="px-4 py-3 text-slate-300">#{raffle.id}</td>
+                        <td className="px-4 py-3 text-white font-medium">{raffle.title}</td>
+                        <td className="px-4 py-3">
+                          <span className="px-2 py-1 rounded-full text-xs bg-gold/20 text-gold">
+                            {raffle.category}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-cyan font-semibold">{formatPrice(raffle.ticketPrice)}</td>
+                        <td className="px-4 py-3 text-gold font-semibold">{raffle.ticketsSold}</td>
+                        <td className="px-4 py-3 text-slate-300">{raffle.totalTickets}</td>
+                        <td className="px-4 py-3">{getStatusBadge(raffle.status)}</td>
+                        <td className="px-4 py-3 text-slate-400 text-sm">{formatDate(raffle.endDate)}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="8" className="px-4 py-12 text-center text-slate-400">
+                        No hay sorteos registrados
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default AdminPage;
