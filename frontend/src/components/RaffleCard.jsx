@@ -47,36 +47,36 @@ const RaffleCard = memo(({ raffle }) => {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
           
           {/* Badges */}
-          <span className="absolute top-3 left-3 px-2.5 py-1 text-xs font-bold uppercase rounded-md bg-gold/90 text-slate-900">
+          <span className="absolute top-4 left-4 px-2.5 py-1 text-xs font-bold uppercase rounded-md bg-gold/90 text-slate-900">
             {category}
           </span>
           
           {isHot && (
-            <span className="absolute top-3 right-3 px-2.5 py-1 text-xs font-bold rounded-md bg-gradient-to-r from-orange-500 to-red-500 text-white flex items-center gap-1">
+            <span className="absolute top-4 right-4 px-2.5 py-1 text-xs font-bold rounded-md bg-gradient-to-r from-orange-500 to-red-500 text-white flex items-center gap-1">
               <Flame size={12} />
               Hot
             </span>
           )}
 
           {/* Prize */}
-          <div className="absolute bottom-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-sm text-gold font-bold">
+          <div className="absolute bottom-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-sm text-gold font-bold">
             <Trophy size={14} />
             {formatPrice(prizeValue)}
           </div>
         </div>
 
         {/* Content */}
-        <div className="flex flex-col flex-grow p-6">
-          <h3 className="text-xl font-bold text-white mb-3 line-clamp-1 group-hover:text-gold transition-colors">
+        <div className="flex flex-col flex-grow p-5 sm:p-6 md:p-8">
+          <h3 className="text-xl font-bold text-white mb-4 line-clamp-1 group-hover:text-gold transition-colors">
             {title}
           </h3>
           
-          <p className="text-slate-400 text-sm mb-5 line-clamp-2 flex-grow leading-relaxed">
+          <p className="text-slate-400 text-sm mb-6 line-clamp-2 flex-grow leading-relaxed">
             {description}
           </p>
 
           {/* Progress */}
-          <div className="mb-5">
+          <div className="mb-6">
             <div className="flex justify-between text-sm mb-2">
               <span className="text-slate-400">{ticketsSold} vendidos</span>
               <span className="text-gold font-medium">{remainingTickets} disponibles</span>
@@ -90,7 +90,7 @@ const RaffleCard = memo(({ raffle }) => {
           </div>
 
           {/* Info */}
-          <div className="flex items-center justify-between mb-5 py-3 px-4 rounded-xl bg-white/5">
+          <div className="flex items-center justify-between mb-6 py-3 px-4 rounded-xl bg-white/5">
             <div className="flex items-center gap-2 text-slate-400 text-sm">
               <Clock size={16} className="text-cyan" />
               {formatDate(endDate)}

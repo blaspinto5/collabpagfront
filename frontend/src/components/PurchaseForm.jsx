@@ -75,7 +75,7 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="glass rounded-2xl p-6 space-y-6">
+    <form onSubmit={handleSubmit} className="glass rounded-2xl p-5 sm:p-6 md:p-8 space-y-6">
       <h3 className="text-xl font-bold text-gold flex items-center gap-2">
         <CreditCard size={24} />
         Comprar Boletos

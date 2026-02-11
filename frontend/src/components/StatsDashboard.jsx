@@ -16,7 +16,7 @@ const StatCard = ({ title, value, icon: Icon, trend, color = 'gold' }) => {
   };
 
   return (
-    <div className="glass rounded-xl p-6 card-hover">
+    <div className="glass rounded-xl p-5 sm:p-6 md:p-8 card-hover">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-slate-400 text-sm">{title}</p>
@@ -51,7 +51,7 @@ const StatsDashboard = () => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="glass rounded-xl p-6 animate-pulse">
+          <div key={i} className="glass rounded-xl p-5 sm:p-6 md:p-8 animate-pulse">
             <div className="h-4 bg-primary-light/50 rounded w-1/2 mb-4" />
             <div className="h-8 bg-primary-light/50 rounded w-3/4" />
           </div>
