@@ -10,7 +10,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/5 mt-auto">
+    <footer className="sticky bottom-0 z-50 w-full bg-[#0f172a]/90 backdrop-blur-xl border-b border-white/5">
       <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand */}
