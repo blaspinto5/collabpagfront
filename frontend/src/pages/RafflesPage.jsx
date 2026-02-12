@@ -42,7 +42,7 @@ const RafflesPage = () => {
         </div>
 
         {/* Filters */}
-        <div className="glass rounded-3xl p-8 md:p-10 mb-14">
+        <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-10 mb-14">
           <div className="flex flex-col md:flex-row gap-5 md:gap-8">
             {/* Search */}
             <div className="flex-1 relative">
@@ -52,7 +52,7 @@ const RafflesPage = () => {
                 placeholder="Buscar sorteos..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field pl-12"
+                className="w-full px-4 py-3.5 rounded-xl bg-slate-800/50 border border-white/10 text-slate-200 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 placeholder:text-slate-500 transition-all pl-12"
               />
             </div>
 
@@ -62,7 +62,7 @@ const RafflesPage = () => {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="input-field w-full md:w-56"
+                className="w-full px-4 py-3.5 rounded-xl bg-slate-800/50 border border-white/10 text-slate-200 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 placeholder:text-slate-500 transition-all md:w-56"
               >
                 <option value="all">Todas las categorías</option>
                 {categories.filter(cat => cat.id !== 'all').map((cat) => (
@@ -82,7 +82,7 @@ const RafflesPage = () => {
 
         {/* Raffles Grid */}
         {error ? (
-          <div className="text-center py-20 glass rounded-2xl">
+          <div className="text-center py-20 bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl">
             <p className="text-red-400 text-lg">{error}</p>
           </div>
         ) : loading ? (
@@ -98,7 +98,7 @@ const RafflesPage = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 glass rounded-2xl">
+          <div className="text-center py-20 bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl">
             <Ticket size={56} className="text-slate-600 mx-auto mb-6" />
             <p className="text-slate-400 text-lg md:text-xl">
               No se encontraron sorteos con esos criterios.

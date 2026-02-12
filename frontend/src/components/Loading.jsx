@@ -36,7 +36,7 @@ export const PageLoader = memo(() => (
 PageLoader.displayName = 'PageLoader';
 
 export const CardSkeleton = memo(() => (
-  <div className="glass rounded-2xl overflow-hidden animate-pulse">
+  <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden animate-pulse">
     <div className="h-48 bg-primary-light/50" />
     <div className="p-5 space-y-4">
       <div className="h-6 bg-primary-light/50 rounded w-3/4" />

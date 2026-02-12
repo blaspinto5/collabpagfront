@@ -47,7 +47,7 @@ const RaffleDetailPage = () => {
           <AlertTriangle size={64} className="text-red-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-white mb-2">Sorteo no encontrado</h1>
           <p className="text-slate-400 mb-6">{error || 'El sorteo que buscas no existe o ya no está disponible.'}</p>
-          <Link to="/sorteos" className="btn-primary inline-flex items-center gap-2">
+          <Link to="/sorteos" className="px-7 py-3.5 rounded-xl font-semibold transition-all bg-gradient-to-r from-gold to-amber-600 text-slate-900 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30 inline-flex items-center gap-2">
             <ArrowLeft size={18} />
             Ver todos los sorteos
           </Link>
@@ -104,7 +104,7 @@ const RaffleDetailPage = () => {
             </div>
 
             {/* Title & Description */}
-            <div className="glass rounded-2xl p-6">
+            <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 {raffle.title}
               </h1>
@@ -115,22 +115,22 @@ const RaffleDetailPage = () => {
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="glass rounded-xl p-4 text-center">
+              <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-xl p-4 text-center">
                 <Ticket size={24} className="text-gold mx-auto mb-2" />
                 <p className="text-2xl font-bold text-white">{formatPrice(raffle.ticketPrice)}</p>
                 <p className="text-sm text-slate-400">por boleto</p>
               </div>
-              <div className="glass rounded-xl p-4 text-center">
+              <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-xl p-4 text-center">
                 <Users size={24} className="text-cyan mx-auto mb-2" />
                 <p className="text-2xl font-bold text-white">{raffle.totalTickets}</p>
                 <p className="text-sm text-slate-400">boletos totales</p>
               </div>
-              <div className="glass rounded-xl p-4 text-center">
+              <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-xl p-4 text-center">
                 <CheckCircle size={24} className="text-green-400 mx-auto mb-2" />
                 <p className="text-2xl font-bold text-white">{raffle.ticketsSold}</p>
                 <p className="text-sm text-slate-400">vendidos</p>
               </div>
-              <div className="glass rounded-xl p-4 text-center">
+              <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-xl p-4 text-center">
                 <Calendar size={24} className="text-purple-400 mx-auto mb-2" />
                 <p className="text-lg font-bold text-white">{formatDate(raffle.endDate).split(',')[0]}</p>
                 <p className="text-sm text-slate-400">fecha sorteo</p>
@@ -138,7 +138,7 @@ const RaffleDetailPage = () => {
             </div>
 
             {/* Progress */}
-            <div className="glass rounded-xl p-6">
+            <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-xl p-6">
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-slate-400">Progreso de venta</span>
                 <span className="text-gold font-semibold">{progress.toFixed(1)}%</span>
@@ -162,7 +162,7 @@ const RaffleDetailPage = () => {
               {raffle.status === 'active' && remainingTickets > 0 ? (
                 <PurchaseForm raffle={raffle} />
               ) : (
-                <div className="glass rounded-2xl p-6 text-center">
+                <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-center">
                   <AlertTriangle size={48} className="text-yellow-400 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-white mb-2">
                     {remainingTickets === 0 ? 'Sorteo Agotado' : 'Sorteo Finalizado'}
@@ -172,7 +172,7 @@ const RaffleDetailPage = () => {
                       ? 'Todos los boletos han sido vendidos.' 
                       : 'Este sorteo ya no está disponible.'}
                   </p>
-                  <Link to="/sorteos" className="btn-secondary mt-4 inline-block">
+                  <Link to="/sorteos" className="px-7 py-3.5 rounded-xl font-semibold transition-all bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-slate-900 mt-4 inline-block">
                     Ver otros sorteos
                   </Link>
                 </div>

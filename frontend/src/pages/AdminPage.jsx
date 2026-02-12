@@ -78,7 +78,7 @@ const AdminPage = () => {
           </div>
           <button
             onClick={() => refetch()}
-            className="btn-secondary flex items-center gap-2"
+            className="px-7 py-3.5 rounded-xl font-semibold transition-all bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-slate-900 flex items-center gap-2"
           >
             <RefreshCw size={18} />
             Actualizar
@@ -118,7 +118,7 @@ const AdminPage = () => {
 
         {/* Purchases Tab */}
         {activeTab === 'purchases' && (
-          <div className="glass rounded-xl overflow-hidden">
+          <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-primary-dark/50">
@@ -187,7 +187,7 @@ const AdminPage = () => {
 
         {/* Raffles Tab */}
         {activeTab === 'raffles' && (
-          <div className="glass rounded-xl overflow-hidden">
+          <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-primary-dark/50">

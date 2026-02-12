@@ -10,21 +10,17 @@ import { Sparkles, Gift, Trophy, ArrowRight, Play } from 'lucide-react';
 const HeroSection = () => {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Background with Enhanced Overlay */}
+      {/* Background */}
       <div className="absolute inset-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110"
-          style={{ backgroundImage: `url('/hero-bg.jpg')` }}
-        />
-        {/* Multi-layer gradient for better contrast */}
+        <div className="absolute inset-0 bg-[url('/hero-bg.jpg')] bg-cover bg-center scale-110" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-primary/60 to-primary-dark/95" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/50 via-transparent to-primary-dark/50" />
       </div>
 
-      {/* Subtle Animated Glow Effects */}
+      {/* Glow Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyan/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyan/10 rounded-full blur-[100px] animate-pulse delay-1000" />
       </div>
 
       {/* Main Content */}

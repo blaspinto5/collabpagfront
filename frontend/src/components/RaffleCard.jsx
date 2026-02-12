@@ -34,7 +34,7 @@ const RaffleCard = memo(({ raffle }) => {
 
   return (
     <div className="group h-full">
-      <div className="h-full flex flex-col glass rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-gold/30">
+      <div className="h-full flex flex-col bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-gold/30">
         
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
@@ -52,8 +52,8 @@ const RaffleCard = memo(({ raffle }) => {
           </span>
           
           {isHot && (
-            <span className="absolute top-3 right-3 px-2.5 py-1 text-xs font-bold rounded-md bg-gradient-to-r from-orange-500 to-red-500 text-white flex items-center gap-1">
-              <Flame size={12} />
+            <span className="absolute top-3 right-3 px-2.5 py-1 text-xs font-bold rounded-md bg-gradient-to-r from-orange-500 to-red-500 text-white flex items-center gap-1 animate-[shake_0.5s_ease-in-out_infinite]">
+              <Flame size={12} className="animate-pulse" />
               Hot
             </span>
           )}

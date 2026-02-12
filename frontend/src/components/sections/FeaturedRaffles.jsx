@@ -6,7 +6,7 @@
 
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Star, ChevronLeft, ChevronRight, Sparkles, ChevronDown } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import RaffleCard from '../RaffleCard';
@@ -21,6 +21,15 @@ const FeaturedRaffles = ({ raffles, loading, error }) => {
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary-dark/50 via-primary/30 to-primary-dark/70" />
       
+      {/* Animated Background Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-2 h-2 bg-gold/40 rounded-full animate-[float_4s_ease-in-out_infinite]" />
+        <div className="absolute top-40 right-20 w-3 h-3 bg-cyan/30 rounded-full animate-[float_5s_ease-in-out_infinite_0.5s]" />
+        <div className="absolute bottom-32 left-1/4 w-2 h-2 bg-gold/30 rounded-full animate-[float_3.5s_ease-in-out_infinite_1s]" />
+        <div className="absolute top-1/3 right-1/3 w-4 h-4 bg-cyan/20 rounded-full animate-[float_6s_ease-in-out_infinite_0.2s]" />
+        <div className="absolute bottom-20 right-10 w-2 h-2 bg-gold/50 rounded-full animate-[float_4.5s_ease-in-out_infinite_0.8s]" />
+      </div>
+      
       {/* Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
       <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
@@ -28,21 +37,27 @@ const FeaturedRaffles = ({ raffles, loading, error }) => {
       <div className="relative z-10 max-w-7xl mx-auto px-8 sm:px-10 lg:px-16">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-gold/10 border border-gold/20 mb-6">
-            <Sparkles size={18} className="text-gold" />
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-gold/10 border border-gold/20 mb-6 animate-[pulse-glow_2s_ease-in-out_infinite]">
+            <Sparkles size={18} className="text-gold animate-spin" style={{ animationDuration: '3s' }} />
             <span className="text-gold text-sm font-semibold uppercase tracking-wider">
               Sorteos Destacados
             </span>
-            <Sparkles size={18} className="text-gold" />
+            <Sparkles size={18} className="text-gold animate-spin" style={{ animationDuration: '3s', animationDirection: 'reverse' }} />
           </div>
           
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 tracking-tight animate-[float_4s_ease-in-out_infinite]">
             ¡Participa Ahora!
           </h2>
           
-          <p className="text-slate-400 text-base md:text-lg lg:text-xl max-w-2xl mx-auto">
+          <p className="text-slate-400 text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-6">
             No pierdas la oportunidad de ganar increíbles premios
           </p>
+          
+          {/* Animated Arrows */}
+          <div className="flex justify-center gap-4">
+            <ChevronDown size={28} className="text-gold animate-[bounce-arrow_1.5s_ease-in-out_infinite]" />
+            <ChevronDown size={28} className="text-gold animate-[bounce-arrow_1.5s_ease-in-out_infinite_0.2s]" />
+          </div>
         </div>
 
         {/* Content */}
@@ -75,16 +90,16 @@ const FeaturedRaffles = ({ raffles, loading, error }) => {
 
 // Carousel Content - Memoized
 const CarouselContent = memo(({ raffles }) => (
-  <div className="relative mx-auto" style={{ maxWidth: '1100px' }}>
+  <div className="relative mx-auto max-w-5xl">
     {/* Navigation Buttons */}
     <button 
-      className="swiper-btn-prev hidden md:flex absolute left-2 top-[200px] z-30 w-10 h-10 rounded-full bg-primary-dark/90 border border-gold/50 items-center justify-center text-gold hover:bg-gold hover:text-primary-dark transition-all duration-300 shadow-xl"
+      className="swiper-btn-prev hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-slate-900/90 border border-gold/50 items-center justify-center text-gold hover:bg-gold hover:text-slate-900 transition-colors"
       aria-label="Anterior"
     >
       <ChevronLeft size={20} />
     </button>
     <button 
-      className="swiper-btn-next hidden md:flex absolute right-2 top-[200px] z-30 w-10 h-10 rounded-full bg-primary-dark/90 border border-gold/50 items-center justify-center text-gold hover:bg-gold hover:text-primary-dark transition-all duration-300 shadow-xl"
+      className="swiper-btn-next hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-slate-900/90 border border-gold/50 items-center justify-center text-gold hover:bg-gold hover:text-slate-900 transition-colors"
       aria-label="Siguiente"
     >
       <ChevronRight size={20} />

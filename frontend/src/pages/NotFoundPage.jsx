@@ -9,10 +9,10 @@ const NotFoundPage = () => {
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 flex items-center justify-center">
       <div className="max-w-lg w-full text-center">
-        <div className="glass rounded-2xl p-8">
+        <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
           {/* 404 */}
           <div className="mb-6">
-            <span className="text-8xl font-bold gradient-text">404</span>
+            <span className="text-8xl font-bold bg-gradient-to-r from-gold to-cyan bg-clip-text text-transparent">404</span>
           </div>
 
           {/* Title */}
@@ -27,11 +27,11 @@ const NotFoundPage = () => {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link to="/" className="btn-primary flex items-center justify-center gap-2">
+            <Link to="/" className="px-7 py-3.5 rounded-xl font-semibold transition-all bg-gradient-to-r from-gold to-amber-600 text-slate-900 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30 flex items-center justify-center gap-2">
               <Home size={18} />
               Ir al inicio
             </Link>
-            <Link to="/sorteos" className="btn-secondary flex items-center justify-center gap-2">
+            <Link to="/sorteos" className="px-7 py-3.5 rounded-xl font-semibold transition-all bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-slate-900 flex items-center justify-center gap-2">
               <Ticket size={18} />
               Ver sorteos
             </Link>

@@ -75,7 +75,7 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="glass rounded-2xl p-6 space-y-6">
+    <form onSubmit={handleSubmit} className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-6">
       <h3 className="text-xl font-bold text-gold flex items-center gap-2">
         <CreditCard size={24} />
         Comprar Boletos
@@ -125,7 +125,7 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
             onChange={handleChange}
             required
             placeholder="Tu nombre"
-            className="input-field"
+            className="w-full px-4 py-3.5 rounded-xl bg-slate-800/50 border border-white/10 text-slate-200 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 placeholder:text-slate-500 transition-all"
           />
         </div>
 
@@ -141,7 +141,7 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
             onChange={handleChange}
             required
             placeholder="tu@email.com"
-            className="input-field"
+            className="w-full px-4 py-3.5 rounded-xl bg-slate-800/50 border border-white/10 text-slate-200 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 placeholder:text-slate-500 transition-all"
           />
         </div>
 
@@ -156,7 +156,7 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
             value={formData.buyerPhone}
             onChange={handleChange}
             placeholder="+56 9 XXXX XXXX"
-            className="input-field"
+            className="w-full px-4 py-3.5 rounded-xl bg-slate-800/50 border border-white/10 text-slate-200 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 placeholder:text-slate-500 transition-all"
           />
         </div>
       </div>
@@ -189,7 +189,7 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
       <button
         type="submit"
         disabled={loading || remainingTickets === 0}
-        className="w-full btn-primary flex items-center justify-center gap-2 text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full px-7 py-4 rounded-xl font-semibold transition-all bg-gradient-to-r from-gold to-amber-600 text-slate-900 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30 flex items-center justify-center gap-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? (
           <>
