@@ -1,11 +1,13 @@
 /**
  * RaffleCard Component
- * Clean, modern card design
+ * Clean, modern card design using centralized UI components
  */
 
 import { memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Ticket, Clock, Trophy, ChevronRight, Flame } from 'lucide-react';
+import { Badge, Button, Card } from './ui';
+import { cardStyles } from '../styles/theme';
 
 // Formatters
 const formatDate = (dateString) => 
@@ -34,8 +36,7 @@ const RaffleCard = memo(({ raffle }) => {
 
   return (
     <div className="group h-full">
-      <div className="h-full flex flex-col bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-gold/30">
-        
+      <Card size="sm" className="h-full flex flex-col overflow-hidden p-0">
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
           <img
@@ -47,19 +48,18 @@ const RaffleCard = memo(({ raffle }) => {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
           
           {/* Badges */}
-          <span className="absolute top-3 left-3 px-2.5 py-1 text-xs font-bold uppercase rounded-md bg-gold/90 text-slate-900">
+          <Badge variant="gold" className="absolute top-3 left-3">
             {category}
-          </span>
+          </Badge>
           
           {isHot && (
-            <span className="absolute top-3 right-3 px-2.5 py-1 text-xs font-bold rounded-md bg-gradient-to-r from-orange-500 to-red-500 text-white flex items-center gap-1 animate-[shake_0.5s_ease-in-out_infinite]">
-              <Flame size={12} className="animate-pulse" />
+            <Badge variant="hot" icon={<Flame size={12} className="animate-pulse" />} className="absolute top-3 right-3">
               Hot
-            </span>
+            </Badge>
           )}
 
           {/* Prize */}
-          <div className="absolute bottom-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-sm text-gold font-bold">
+          <div className="absolute bottom-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-sm text-gold font-bold text-sm">
             <Trophy size={14} />
             {formatPrice(prizeValue)}
           </div>
@@ -83,7 +83,7 @@ const RaffleCard = memo(({ raffle }) => {
             </div>
             <div className="h-2 bg-slate-700/50 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-gold to-yellow-400 rounded-full"
+                className="h-full bg-gradient-to-r from-gold to-yellow-400 rounded-full transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -102,15 +102,13 @@ const RaffleCard = memo(({ raffle }) => {
           </div>
 
           {/* CTA */}
-          <Link
-            to={`/sorteo/${id}`}
-            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold to-yellow-500 text-slate-900 font-bold text-center flex items-center justify-center gap-2 transition-all hover:shadow-lg hover:shadow-gold/20"
-          >
-            Participar
-            <ChevronRight size={18} />
+          <Link to={`/sorteo/${id}`}>
+            <Button variant="primary" size="md" className="w-full" iconRight={<ChevronRight size={18} />}>
+              Participar
+            </Button>
           </Link>
         </div>
-      </div>
+      </Card>
     </div>
   );
 });

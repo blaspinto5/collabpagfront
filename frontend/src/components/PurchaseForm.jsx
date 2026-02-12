@@ -1,11 +1,12 @@
 /**
  * PurchaseForm Component
- * Form for purchasing raffle tickets
+ * Form for purchasing raffle tickets using centralized UI components
  */
 
 import { useState } from 'react';
 import { Minus, Plus, User, Mail, Phone, CreditCard, Loader2 } from 'lucide-react';
 import { paymentService } from '../services';
+import { Card, Button, Input } from './ui';
 
 const PurchaseForm = ({ raffle, onSuccess }) => {
   const [ticketCount, setTicketCount] = useState(1);
@@ -59,7 +60,6 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
         ...formData
       });
 
-      // Redirect to MercadoPago
       if (response.initPoint) {
         window.location.href = response.initPoint;
       } else if (response.sandboxInitPoint) {
@@ -75,7 +75,7 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-6">
+    <Card as="form" onSubmit={handleSubmit} hoverable={false} className="space-y-6">
       <h3 className="text-xl font-bold text-gold flex items-center gap-2">
         <CreditCard size={24} />
         Comprar Boletos
@@ -85,26 +85,30 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
       <div className="bg-primary-dark/50 rounded-xl p-4">
         <label className="block text-sm text-slate-400 mb-2">Cantidad de boletos</label>
         <div className="flex items-center justify-between">
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={decrementTickets}
             disabled={ticketCount <= 1}
-            className="w-12 h-12 rounded-lg bg-gold/20 text-gold flex items-center justify-center hover:bg-gold/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-12 h-12 bg-gold/20 text-gold hover:bg-gold/30"
           >
             <Minus size={20} />
-          </button>
+          </Button>
           <div className="text-center">
             <span className="text-4xl font-bold text-white">{ticketCount}</span>
             <p className="text-sm text-slate-400">boleto{ticketCount > 1 ? 's' : ''}</p>
           </div>
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={incrementTickets}
             disabled={ticketCount >= remainingTickets || ticketCount >= 10}
-            className="w-12 h-12 rounded-lg bg-gold/20 text-gold flex items-center justify-center hover:bg-gold/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-12 h-12 bg-gold/20 text-gold hover:bg-gold/30"
           >
             <Plus size={20} />
-          </button>
+          </Button>
         </div>
         <p className="text-center text-sm text-slate-500 mt-2">
           Máximo 10 boletos por compra • {remainingTickets} disponibles
@@ -118,14 +122,13 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
             <User size={14} className="inline mr-1" />
             Nombre completo
           </label>
-          <input
+          <Input
             type="text"
             name="buyerName"
             value={formData.buyerName}
             onChange={handleChange}
             required
             placeholder="Tu nombre"
-            className="w-full px-4 py-3.5 rounded-xl bg-slate-800/50 border border-white/10 text-slate-200 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 placeholder:text-slate-500 transition-all"
           />
         </div>
 
@@ -134,14 +137,13 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
             <Mail size={14} className="inline mr-1" />
             Email
           </label>
-          <input
+          <Input
             type="email"
             name="buyerEmail"
             value={formData.buyerEmail}
             onChange={handleChange}
             required
             placeholder="tu@email.com"
-            className="w-full px-4 py-3.5 rounded-xl bg-slate-800/50 border border-white/10 text-slate-200 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 placeholder:text-slate-500 transition-all"
           />
         </div>
 
@@ -150,13 +152,12 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
             <Phone size={14} className="inline mr-1" />
             Teléfono (opcional)
           </label>
-          <input
+          <Input
             type="tel"
             name="buyerPhone"
             value={formData.buyerPhone}
             onChange={handleChange}
             placeholder="+56 9 XXXX XXXX"
-            className="w-full px-4 py-3.5 rounded-xl bg-slate-800/50 border border-white/10 text-slate-200 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 placeholder:text-slate-500 transition-all"
           />
         </div>
       </div>
@@ -186,28 +187,22 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
       )}
 
       {/* Submit Button */}
-      <button
+      <Button
         type="submit"
+        variant="primary"
+        size="lg"
         disabled={loading || remainingTickets === 0}
-        className="w-full px-7 py-4 rounded-xl font-semibold transition-all bg-gradient-to-r from-gold to-amber-600 text-slate-900 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30 flex items-center justify-center gap-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+        loading={loading}
+        icon={loading ? null : <CreditCard size={20} />}
+        className="w-full"
       >
-        {loading ? (
-          <>
-            <Loader2 size={20} className="animate-spin" />
-            Procesando...
-          </>
-        ) : (
-          <>
-            <CreditCard size={20} />
-            Pagar con MercadoPago
-          </>
-        )}
-      </button>
+        {loading ? 'Procesando...' : 'Pagar con MercadoPago'}
+      </Button>
 
       <p className="text-xs text-slate-500 text-center">
         Al continuar, aceptas nuestros términos y condiciones
       </p>
-    </form>
+    </Card>
   );
 };
 

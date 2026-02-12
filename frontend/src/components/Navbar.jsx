@@ -1,11 +1,12 @@
 /**
  * Navbar Component
- * Clean, minimal navigation
+ * Clean, minimal navigation using centralized UI
  */
 
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Ticket, LayoutDashboard } from 'lucide-react';
 import { useState, useCallback } from 'react';
+import { Button } from './ui';
 
 const navLinks = [
   { path: '/', label: 'Inicio' },
@@ -52,13 +53,15 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Toggle */}
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={toggleMenu}
-            className="md:hidden p-2 text-slate-300 hover:text-gold rounded-lg transition-colors"
+            className="md:hidden text-slate-300 hover:text-gold"
             aria-label="Toggle menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          </Button>
         </div>
 
         {/* Mobile Nav */}

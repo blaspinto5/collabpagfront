@@ -6,6 +6,7 @@
 import { DollarSign, Ticket, Users, TrendingUp } from 'lucide-react';
 import { useStats } from '../hooks';
 import { Spinner } from './Loading';
+import { Card } from './ui';
 
 const StatCard = ({ title, value, icon: Icon, trend, color = 'gold' }) => {
   const colorClasses = {
@@ -16,7 +17,7 @@ const StatCard = ({ title, value, icon: Icon, trend, color = 'gold' }) => {
   };
 
   return (
-    <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-xl p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+    <Card size="sm" className="p-6">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-slate-400 text-sm">{title}</p>
@@ -32,7 +33,7 @@ const StatCard = ({ title, value, icon: Icon, trend, color = 'gold' }) => {
           <Icon size={24} />
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 
@@ -51,10 +52,10 @@ const StatsDashboard = () => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-xl p-6 animate-pulse">
+          <Card key={i} size="sm" hoverable={false} className="p-6 animate-pulse">
             <div className="h-4 bg-primary-light/50 rounded w-1/2 mb-4" />
             <div className="h-8 bg-primary-light/50 rounded w-3/4" />
-          </div>
+          </Card>
         ))}
       </div>
     );

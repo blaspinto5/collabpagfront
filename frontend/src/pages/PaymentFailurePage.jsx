@@ -1,16 +1,17 @@
 /**
  * Payment Failure Page
- * Displayed after failed payment
+ * Displayed after failed payment - Using centralized UI components
  */
 
 import { Link } from 'react-router-dom';
 import { XCircle, Home, RefreshCw, HelpCircle } from 'lucide-react';
+import { Card, Button } from '../components/ui';
 
 const PaymentFailurePage = () => {
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 flex items-center justify-center">
       <div className="max-w-lg w-full text-center">
-        <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
+        <Card hoverable={false} className="p-8">
           {/* Failure Icon */}
           <div className="relative mb-6">
             <div className="w-24 h-24 mx-auto rounded-full bg-red-500/20 flex items-center justify-center">
@@ -53,16 +54,18 @@ const PaymentFailurePage = () => {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link to="/sorteos" className="px-7 py-3.5 rounded-xl font-semibold transition-all bg-gradient-to-r from-gold to-amber-600 text-slate-900 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30 flex items-center justify-center gap-2">
-              <RefreshCw size={18} />
-              Intentar de nuevo
+            <Link to="/sorteos">
+              <Button variant="primary" icon={<RefreshCw size={18} />}>
+                Intentar de nuevo
+              </Button>
             </Link>
-            <Link to="/" className="px-7 py-3.5 rounded-xl font-semibold transition-all bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-slate-900 flex items-center justify-center gap-2">
-              <Home size={18} />
-              Ir al inicio
+            <Link to="/">
+              <Button variant="secondary" icon={<Home size={18} />}>
+                Ir al inicio
+              </Button>
             </Link>
           </div>
-        </div>
+        </Card>
 
         {/* Support */}
         <p className="text-slate-500 text-sm mt-6">

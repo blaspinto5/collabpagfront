@@ -1,10 +1,11 @@
 /**
  * Admin Page
- * Dashboard for managing raffles and purchases
+ * Dashboard for managing raffles and purchases - Using centralized UI components
  */
 
 import { useState } from 'react';
 import { StatsDashboard, TableRowSkeleton } from '../components';
+import { Card, Button, Badge } from '../components/ui';
 import { usePurchases, useRaffles } from '../hooks';
 import { 
   LayoutDashboard, 
@@ -41,20 +42,22 @@ const AdminPage = () => {
   };
 
   const getStatusBadge = (status) => {
-    const styles = {
-      pending: 'bg-yellow-500/20 text-yellow-400',
-      confirmed: 'bg-green-500/20 text-green-400',
-      cancelled: 'bg-red-500/20 text-red-400'
+    const variants = {
+      pending: 'warning',
+      confirmed: 'success',
+      cancelled: 'error',
+      active: 'success'
     };
     const labels = {
       pending: 'Pendiente',
       confirmed: 'Confirmado',
-      cancelled: 'Cancelado'
+      cancelled: 'Cancelado',
+      active: 'Activo'
     };
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${styles[status] || styles.pending}`}>
+      <Badge variant={variants[status] || 'pending'}>
         {labels[status] || status}
-      </span>
+      </Badge>
     );
   };
 
@@ -76,13 +79,13 @@ const AdminPage = () => {
             <h1 className="text-3xl font-bold text-white">Panel de Administración</h1>
             <p className="text-slate-400">Gestiona sorteos y compras</p>
           </div>
-          <button
+          <Button
+            variant="secondary"
             onClick={() => refetch()}
-            className="px-7 py-3.5 rounded-xl font-semibold transition-all bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-slate-900 flex items-center gap-2"
+            icon={<RefreshCw size={18} />}
           >
-            <RefreshCw size={18} />
             Actualizar
-          </button>
+          </Button>
         </div>
 
         {/* Stats Dashboard */}
@@ -92,33 +95,27 @@ const AdminPage = () => {
 
         {/* Tabs */}
         <div className="flex gap-4 mb-6 border-b border-gold/20 pb-4">
-          <button
+          <Button
+            variant={activeTab === 'purchases' ? 'primary' : 'ghost'}
             onClick={() => setActiveTab('purchases')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              activeTab === 'purchases'
-                ? 'bg-gold/20 text-gold'
-                : 'text-slate-400 hover:text-white'
-            }`}
+            icon={<Users size={18} />}
+            className={activeTab === 'purchases' ? 'bg-gold/20 text-gold hover:bg-gold/30' : ''}
           >
-            <Users size={18} />
             Compras
-          </button>
-          <button
+          </Button>
+          <Button
+            variant={activeTab === 'raffles' ? 'primary' : 'ghost'}
             onClick={() => setActiveTab('raffles')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              activeTab === 'raffles'
-                ? 'bg-gold/20 text-gold'
-                : 'text-slate-400 hover:text-white'
-            }`}
+            icon={<Ticket size={18} />}
+            className={activeTab === 'raffles' ? 'bg-gold/20 text-gold hover:bg-gold/30' : ''}
           >
-            <Ticket size={18} />
             Sorteos
-          </button>
+          </Button>
         </div>
 
         {/* Purchases Tab */}
         {activeTab === 'purchases' && (
-          <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden">
+          <Card hoverable={false} className="overflow-hidden !p-0">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-primary-dark/50">
@@ -154,20 +151,24 @@ const AdminPage = () => {
                         <td className="px-4 py-3">
                           <div className="flex gap-2">
                             {purchase.status === 'pending' && (
-                              <button
+                              <Button
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => handleConfirm(purchase.id)}
-                                className="p-2 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-colors"
+                                className="p-2 bg-green-500/20 text-green-400 hover:bg-green-500/30"
                                 title="Confirmar compra"
                               >
                                 <CheckCircle size={16} />
-                              </button>
+                              </Button>
                             )}
-                            <button
-                              className="p-2 rounded-lg bg-cyan/20 text-cyan hover:bg-cyan/30 transition-colors"
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="p-2 bg-cyan/20 text-cyan hover:bg-cyan/30"
                               title="Ver detalles"
                             >
                               <Eye size={16} />
-                            </button>
+                            </Button>
                           </div>
                         </td>
                       </tr>
@@ -182,12 +183,12 @@ const AdminPage = () => {
                 </tbody>
               </table>
             </div>
-          </div>
+          </Card>
         )}
 
         {/* Raffles Tab */}
         {activeTab === 'raffles' && (
-          <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden">
+          <Card hoverable={false} className="overflow-hidden !p-0">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-primary-dark/50">
@@ -211,9 +212,7 @@ const AdminPage = () => {
                         <td className="px-4 py-3 text-slate-300">#{raffle.id}</td>
                         <td className="px-4 py-3 text-white font-medium">{raffle.title}</td>
                         <td className="px-4 py-3">
-                          <span className="px-2 py-1 rounded-full text-xs bg-gold/20 text-gold">
-                            {raffle.category}
-                          </span>
+                          <Badge variant="gold">{raffle.category}</Badge>
                         </td>
                         <td className="px-4 py-3 text-cyan font-semibold">{formatPrice(raffle.ticketPrice)}</td>
                         <td className="px-4 py-3 text-gold font-semibold">{raffle.ticketsSold}</td>
@@ -232,7 +231,7 @@ const AdminPage = () => {
                 </tbody>
               </table>
             </div>
-          </div>
+          </Card>
         )}
       </div>
     </div>

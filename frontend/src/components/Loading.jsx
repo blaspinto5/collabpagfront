@@ -1,11 +1,12 @@
 /**
  * Loading Component
  * Spinner and skeleton loader components
- * Optimized with React.memo
+ * Optimized with React.memo - Using centralized UI components
  */
 
 import { memo } from 'react';
 import { Loader2 } from 'lucide-react';
+import { Card } from './ui';
 
 export const Spinner = memo(({ size = 'md', className = '' }) => {
   const sizeClasses = {
@@ -36,7 +37,7 @@ export const PageLoader = memo(() => (
 PageLoader.displayName = 'PageLoader';
 
 export const CardSkeleton = memo(() => (
-  <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden animate-pulse">
+  <Card hoverable={false} className="overflow-hidden animate-pulse !p-0">
     <div className="h-48 bg-primary-light/50" />
     <div className="p-5 space-y-4">
       <div className="h-6 bg-primary-light/50 rounded w-3/4" />
@@ -49,7 +50,7 @@ export const CardSkeleton = memo(() => (
       </div>
       <div className="h-12 bg-primary-light/50 rounded-lg" />
     </div>
-  </div>
+  </Card>
 ));
 
 CardSkeleton.displayName = 'CardSkeleton';

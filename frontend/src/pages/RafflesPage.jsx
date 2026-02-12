@@ -1,10 +1,11 @@
 /**
  * Raffles Page
- * Lists all active raffles with filtering
+ * Lists all active raffles with filtering - Using centralized UI components
  */
 
 import { useState } from 'react';
 import { RaffleCard, CardSkeleton } from '../components';
+import { Card, Input, Select, Badge, Button } from '../components/ui';
 import { useRaffles, useCategories } from '../hooks';
 import { Search, Filter, Ticket } from 'lucide-react';
 
@@ -24,15 +25,23 @@ const RafflesPage = () => {
     return matchesCategory && matchesSearch;
   });
 
+  const categoryOptions = [
+    { value: 'all', label: 'Todas las categorías' },
+    ...categories.filter(cat => cat.id !== 'all').map(cat => ({
+      value: cat.id,
+      label: cat.name
+    }))
+  ];
+
   return (
     <div className="min-h-screen py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
-          <span className="inline-block px-5 py-2 rounded-full bg-gold/10 border border-gold/20 text-gold text-xs font-bold uppercase tracking-widest mb-6">
-            <Ticket size={14} className="inline mr-2" />
+          <Badge variant="gold" className="mb-6">
+            <Ticket size={14} className="mr-2" />
             Catálogo
-          </span>
+          </Badge>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
             Sorteos Activos
           </h1>
@@ -42,36 +51,31 @@ const RafflesPage = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-10 mb-14">
+        <Card hoverable={false} className="mb-14 p-8 md:p-10">
           <div className="flex flex-col md:flex-row gap-5 md:gap-8">
             {/* Search */}
-            <div className="flex-1 relative">
-              <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
+            <div className="flex-1">
+              <Input
                 type="text"
                 placeholder="Buscar sorteos..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3.5 rounded-xl bg-slate-800/50 border border-white/10 text-slate-200 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 placeholder:text-slate-500 transition-all pl-12"
+                icon={<Search size={20} />}
               />
             </div>
 
             {/* Category Filter */}
             <div className="flex items-center gap-3">
               <Filter size={20} className="text-slate-400 hidden md:block" />
-              <select
+              <Select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-4 py-3.5 rounded-xl bg-slate-800/50 border border-white/10 text-slate-200 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 placeholder:text-slate-500 transition-all md:w-56"
-              >
-                <option value="all">Todas las categorías</option>
-                {categories.filter(cat => cat.id !== 'all').map((cat) => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
+                options={categoryOptions}
+                className="md:w-56"
+              />
             </div>
           </div>
-        </div>
+        </Card>
 
         {/* Results Count */}
         <div className="flex items-center justify-between mb-10">
@@ -82,9 +86,9 @@ const RafflesPage = () => {
 
         {/* Raffles Grid */}
         {error ? (
-          <div className="text-center py-20 bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl">
+          <Card hoverable={false} className="text-center py-20">
             <p className="text-red-400 text-lg">{error}</p>
-          </div>
+          </Card>
         ) : loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
             {[...Array(6)].map((_, i) => (
@@ -98,12 +102,13 @@ const RafflesPage = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl">
+          <Card hoverable={false} className="text-center py-20">
             <Ticket size={56} className="text-slate-600 mx-auto mb-6" />
             <p className="text-slate-400 text-lg md:text-xl">
               No se encontraron sorteos con esos criterios.
             </p>
-            <button
+            <Button
+              variant="ghost"
               onClick={() => {
                 setSearchTerm('');
                 setSelectedCategory('all');
@@ -111,8 +116,8 @@ const RafflesPage = () => {
               className="mt-6 text-gold hover:underline text-base md:text-lg"
             >
               Limpiar filtros
-            </button>
-          </div>
+            </Button>
+          </Card>
         )}
       </div>
     </div>
