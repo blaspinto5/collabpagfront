@@ -1,69 +1,49 @@
-/**
- * Sorteando Weas - Backend API Server
- * Express server ready for Hostinger Node.js environment
- */
-
 const express = require('express');
-const cors = require('cors');
 const helmet = require('helmet');
-require('dotenv').config();
-
 const cors = require('cors');
-require('dotenv').config();
-const express = require('express');
+const sequelize = require('./src/config/database');
 const apiRoutes = require('./src/routes/api');
+const { notFound, errorHandler } = require('./src/middleware/errorHandler');
+
 const app = express();
 
-// CORS
-app.use(cors({
-   origin: process.env.CORS_ORIGIN,
-   credentials: true,
-}));
+app.use(helmet());
+app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// API ROUTES
 app.use('/api', apiRoutes);
 
-// SERVER START
-const PORT = process.env.PORT;
-app.listen(PORT);
-
-module.exports = app;
-    timestamp: new Date().toISOString()
-  });
-});
-
-/* ==============================
-   API ROUTES
-============================== */
-app.use('/api', apiRoutes);
-
-/* ==============================
-   ERROR HANDLING
-============================== */
 app.use(notFound);
 app.use(errorHandler);
 
-/* ==============================
-   SERVER START
-   IMPORTANT FOR HOSTINGER
-============================== */
-const PORT = process.env.PORT || config.port || 3000;
+function safeLog(...args) {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(...args);
+  }
+}
 
-app.listen(PORT, () => {
-  console.log('============================================================');
-  console.log('🎰 SORTEANDO WEAS - API SERVER');
-  console.log('------------------------------------------------------------');
-  console.log(`Running on port: ${PORT}`);
-  console.log(`Environment: ${config.nodeEnv}`);
-  console.log(`MercadoPago: ${config?.mercadopago?.accessToken ? 'Configured' : 'Not configured'}`);
-  console.log('------------------------------------------------------------');
-  console.log('Available endpoints:');
-  console.log('GET    /health');
-  console.log('GET    /api/raffles');
-  console.log('GET    /api/categories');
-  console.log('GET    /api/stats');
-  console.log('POST   /api/payments/create-preference');
-  console.log('============================================================');
+process.on('unhandledRejection', (err) => {
+  safeLog('UNHANDLED REJECTION!', err);
+  process.exit(1);
 });
 
-module.exports = app;
+(async () => {
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
+
+    const PORT = process.env.PORT;
+    if (!PORT) {
+      throw new Error('PORT is required in the process environment');
+    }
+    app.listen(PORT, () => {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`Server running on port ${PORT}`);
+      }
+    });
+  } catch (err) {
+    safeLog('Failed to start server:', err);
+    process.exit(1);
+  }
+})();
