@@ -13,8 +13,10 @@ import {
   PaymentSuccessPage,
   PaymentFailurePage,
   PaymentPendingPage,
-  NotFoundPage
+  NotFoundPage,
+  IllustrationsPage
 } from '../pages';
+
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: 'sorteo/:id',
         element: <RaffleDetailPage />
+      },
+      {
+        path: 'ilustraciones',
+        element: <IllustrationsPage />
       },
       {
         path: 'admin',

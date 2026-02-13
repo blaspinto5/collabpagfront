@@ -1,7 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL;
-if (!API_BASE_URL) {
-  throw new Error('VITE_API_URL must be defined');
-}
+export const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 export const apiFetch = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
