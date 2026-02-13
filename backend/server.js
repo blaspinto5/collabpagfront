@@ -1,72 +1,69 @@
 /**
  * Sorteando Weas - Backend API Server
- * @description Express server with modular architecture
- * @version 2.0.0
+ * Express server ready for Hostinger Node.js environment
  */
 
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const path = require('path');
 require('dotenv').config();
 
-const config = require('./src/config');
+const cors = require('cors');
+require('dotenv').config();
+const express = require('express');
 const apiRoutes = require('./src/routes/api');
-const { notFound, errorHandler } = require('./src/middleware/errorHandler');
-
 const app = express();
 
-// Security middleware
-app.use(helmet());
-
-// CORS configuration
+// CORS
 app.use(cors({
-  origin: config.corsOrigin,
-  credentials: true
+   origin: process.env.CORS_ORIGIN,
+   credentials: true,
 }));
 
-// Body parsing
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Request logging in development
-if (config.nodeEnv === 'development') {
-  app.use((req, res, next) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
-    next();
-  });
-}
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
-
-// API Routes
+// API ROUTES
 app.use('/api', apiRoutes);
 
-// Error handling
+// SERVER START
+const PORT = process.env.PORT;
+app.listen(PORT);
+
+module.exports = app;
+    timestamp: new Date().toISOString()
+  });
+});
+
+/* ==============================
+   API ROUTES
+============================== */
+app.use('/api', apiRoutes);
+
+/* ==============================
+   ERROR HANDLING
+============================== */
 app.use(notFound);
 app.use(errorHandler);
 
-// Start server
-const PORT = config.port;
+/* ==============================
+   SERVER START
+   IMPORTANT FOR HOSTINGER
+============================== */
+const PORT = process.env.PORT || config.port || 3000;
+
 app.listen(PORT, () => {
-  console.log(`
-╔════════════════════════════════════════════════════╗
-║      🎰 SORTEANDO WEAS - API SERVER 🎰             ║
-╠════════════════════════════════════════════════════╣
-║  🌐 URL: http://localhost:${PORT}                       ║
-║  📁 Environment: ${config.nodeEnv.padEnd(25)}      ║
-║  💳 MercadoPago: ${config.mercadopago.accessToken ? 'Configured' : 'Not configured'}                ║
-╠════════════════════════════════════════════════════╣
-║  API Endpoints:                                    ║
-║  • GET  /api/raffles                               ║
-║  • GET  /api/categories                            ║
-║  • GET  /api/stats                                 ║
-║  • POST /api/payments/create-preference            ║
-╚════════════════════════════════════════════════════╝
-  `);
+  console.log('============================================================');
+  console.log('🎰 SORTEANDO WEAS - API SERVER');
+  console.log('------------------------------------------------------------');
+  console.log(`Running on port: ${PORT}`);
+  console.log(`Environment: ${config.nodeEnv}`);
+  console.log(`MercadoPago: ${config?.mercadopago?.accessToken ? 'Configured' : 'Not configured'}`);
+  console.log('------------------------------------------------------------');
+  console.log('Available endpoints:');
+  console.log('GET    /health');
+  console.log('GET    /api/raffles');
+  console.log('GET    /api/categories');
+  console.log('GET    /api/stats');
+  console.log('POST   /api/payments/create-preference');
+  console.log('============================================================');
 });
 
 module.exports = app;
