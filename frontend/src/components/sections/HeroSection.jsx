@@ -5,7 +5,7 @@
 
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Gift, Trophy, ArrowRight, Play } from 'lucide-react';
+import { Sparkles, Gift, ArrowRight, Play } from 'lucide-react';
 
 const HeroSection = () => {
   return (

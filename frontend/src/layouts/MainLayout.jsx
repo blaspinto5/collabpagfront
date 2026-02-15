@@ -145,7 +145,8 @@ const MainLayout = () => {
       
       <Navbar />
       <main className="flex-1 w-full flex justify-center relative z-10">
-        <div className="w-full max-w-7xl px-6 md:px-10 lg:px-16">
+       <div className="w-full max-w-[1600px] px-6 md:px-8 lg:px-12">
+
           <Outlet />
         </div>
       </main>

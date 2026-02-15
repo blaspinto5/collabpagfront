@@ -5,12 +5,9 @@
 
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay, Navigation } from 'swiper/modules';
-import { Trophy, Ticket, Clock, ChevronRight, ChevronLeft, Flame } from 'lucide-react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import { Image } from 'lucide-react';
+import { Clock, ChevronRight } from 'lucide-react';
+
 
 // Price formatter
 const formatPrice = new Intl.NumberFormat('es-CL', {
@@ -26,79 +23,122 @@ const formatDate = (dateString) =>
         month: 'short'
     });
 
-const HeroCarousel = ({ raffles, loading }) => {
-    if (loading) return <LoadingSkeleton />;
-    if (!raffles?.length) return null;
+const dummyData = [
+    {
+        id: 1,
+        ticketPrice: 2990,
+        totalTickets: 100,
+        ticketsSold: 45,
+        endDate: "2026-03-14",
+        prizeValue: 1299990
+    },
+    {
+        id: 2,
+        ticketPrice: 1990,
+        totalTickets: 150,
+        ticketsSold: 89,
+        endDate: "2026-03-19",
+        prizeValue: 599990
+    },
+     {
+        id: 3,
+        ticketPrice: 1990,
+        totalTickets: 150,
+        ticketsSold: 89,
+        endDate: "2026-03-19",
+        prizeValue: 599990
+    },
+     {
+        id: 4,
+        ticketPrice: 1990,
+        totalTickets: 150,
+        ticketsSold: 89,
+        endDate: "2026-03-19",
+        prizeValue: 599990
+    },
+     {
+        id: 5,
+        ticketPrice: 1990,
+        totalTickets: 150,
+        ticketsSold: 89,
+        endDate: "2026-03-19",
+        prizeValue: 599990
+    },
+     {
+        id: 6,
+        ticketPrice: 1990,
+        totalTickets: 150,
+        ticketsSold: 89,
+        endDate: "2026-03-19",
+        prizeValue: 599990
+    },
+     {
+        id: 7,
+        ticketPrice: 1990,
+        totalTickets: 150,
+        ticketsSold: 89,
+        endDate: "2026-03-19",
+        prizeValue: 599990
+    },
+     {
+        id: 8,
+        ticketPrice: 1990,
+        totalTickets: 150,
+        ticketsSold: 89,
+        endDate: "2026-03-19",
+        prizeValue: 599990
+    },
+    
+];
+
+
+
+const HeroCarousel = () => {
 
     return (
         <section className="py-16 md:py-24">
-            {/* Section Header - Centered */}
-            <div className="max-w-7xl mx-auto mb-12 text-center px-6">
-                <span className="inline-block px-5 py-2 rounded-full bg-gold/10 border border-gold/20 text-gold text-xs font-bold uppercase tracking-widest mb-6">
+
+            {/* Header */}
+            <div className="max-w-7xl mx-auto mb-12 text-center">
+                <span className="inline-block px-5 py-2 rounded-full bg-gold/10 border border-gold/20 text-gold text-lg font-bold uppercase tracking-widest mb-6">
                     Sorteos Activos
                 </span>
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight">
+
+                {/* <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight">
                     Elige tu <span className="text-gold">Premio</span>
-                </h1>
+                </h1> */}
             </div>
 
-            {/* Carousel Container - Con márgenes laterales visibles */}
-            <div className="hero-carousel relative max-w-6xl mx-auto px-8 sm:px-12 md:px-16 lg:px-20 overflow-hidden">
-
-
-                {/* Navigation Arrows */}
-                <button
-                    className="swiper-button-prev-custom hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-slate-800/80 backdrop-blur-sm border border-white/10 items-center justify-center text-white hover:text-gold hover:border-gold/50 transition-all"
-                    aria-label="Anterior"
-                >
-                    <ChevronLeft size={24} />
-                </button>
-                <button
-                    className="swiper-button-next-custom hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-slate-800/80 backdrop-blur-sm border border-white/10 items-center justify-center text-white hover:text-gold hover:border-gold/50 transition-all"
-                    aria-label="Siguiente"
-                >
-                    <ChevronRight size={24} />
-                </button>
-
-                <Swiper
-                    modules={[Pagination, Autoplay, Navigation]}
-                    centerInsufficientSlides={true}
-                    grabCursor={true}
-                    centeredSlides={false}
-                    slidesPerView={1}
-                    spaceBetween={24}
-                    loop={raffles.length > 2}
-                    pagination={{ clickable: true }}
-                    autoplay={{
-                        delay: 5000,
-                        disableOnInteraction: false,
-                        pauseOnMouseEnter: true
-                    }}
-                    navigation={{
-                        prevEl: '.swiper-button-prev-custom',
-                        nextEl: '.swiper-button-next-custom',
-                    }}
-                    breakpoints={{
-                        640: { slidesPerView: 1 },
-                        768: { slidesPerView: 2 },
-                        1024: { slidesPerView: 3 },
-                    }}
-                >
-                    {raffles.map((raffle) => (
-                        <SwiperSlide key={raffle.id}>
-                            <CarouselCard raffle={raffle} />
-                        </SwiperSlide>
+            {/* GRID DE TARJETAS */}
+            <div className="max-w-7xl mx-auto px-2">
+                <div className="
+                    grid 
+                    gap-12
+                    sm:grid-cols-1 
+                    md:grid-cols-4 
+                    lg:grid-cols-4
+                ">
+                    {dummyData.map((raffle, index) => (
+                        <CarouselCard
+                            key={raffle.id}
+                            raffle={{
+                                ...raffle,
+                                image: `/images/img${(index % 8) + 1}.png`
+                            }}
+                        />
                     ))}
-                </Swiper>
-            </div>
 
+
+                </div>
+            </div>
         </section>
     );
 };
 
+
 // Carousel Card - Premium Design
 const CarouselCard = memo(({ raffle }) => {
-    const { id, title, image, ticketPrice, totalTickets, ticketsSold, endDate, prizeValue, category } = raffle;
+    const { id, title, image, ticketPrice, totalTickets, ticketsSold, endDate, category } = raffle;
     const progress = (ticketsSold / totalTickets) * 100;
     const isHot = progress > 70;
 
@@ -122,19 +162,19 @@ const CarouselCard = memo(({ raffle }) => {
                     </span>
 
                     {/* Hot Badge */}
-                    {isHot && (
+                    {/* {isHot && (
                         <span className="absolute top-4 right-4 px-3 py-1 text-xs font-bold rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white flex items-center gap-1">
                             <Flame size={12} />
                             Hot
                         </span>
-                    )}
+                    )} */}
 
                     {/* Prize Value */}
                     <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-gold font-bold text-xl">
+                        {/* <div className="flex items-center gap-2 text-gold font-bold text-xl">
                             <Trophy size={20} />
                             {formatPrice(prizeValue)}
-                        </div>
+                        </div> */}
                         <div className="flex items-center gap-1.5 text-white/80 text-sm">
                             <Clock size={14} />
                             {formatDate(endDate)}
@@ -144,12 +184,13 @@ const CarouselCard = memo(({ raffle }) => {
 
                 {/* Content */}
                 <div className="p-5 sm:p-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 group-hover:text-gold transition-colors line-clamp-1">
-                        {title}
+                    <h3 className="text-xl sm:text-2xl  text-white mb-4 group-hover:text-gold transition-colors line-clamp-1">
+                        Ilustración N° {id}
+
                     </h3>
 
                     {/* Progress */}
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                         <div className="flex justify-between text-sm mb-2">
                             <span className="text-slate-400">{ticketsSold} vendidos</span>
                             <span className="text-gold font-medium">{totalTickets - ticketsSold} disponibles</span>
@@ -160,16 +201,17 @@ const CarouselCard = memo(({ raffle }) => {
                                 style={{ width: `${progress}%` }}
                             />
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* CTA Row */}
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-cyan font-bold">
-                            <Ticket size={18} />
+                            {/* <Ticket size={18} /> */}
+                            <Image size={18} />
                             <span>{formatPrice(ticketPrice)}</span>
                         </div>
                         <span className="inline-flex items-center gap-1 text-gold font-semibold text-sm group-hover:gap-2 transition-all">
-                            Participar
+                            Revisar
                             <ChevronRight size={16} />
                         </span>
                     </div>
