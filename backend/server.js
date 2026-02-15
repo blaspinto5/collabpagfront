@@ -1,72 +1,49 @@
-/**
- * Sorteando Weas - Backend API Server
- * @description Express server with modular architecture
- * @version 2.0.0
- */
-
 const express = require('express');
-const cors = require('cors');
 const helmet = require('helmet');
-const path = require('path');
-require('dotenv').config();
-
-const config = require('./src/config');
+const cors = require('cors');
+const sequelize = require('./src/config/database');
 const apiRoutes = require('./src/routes/api');
 const { notFound, errorHandler } = require('./src/middleware/errorHandler');
 
 const app = express();
 
-// Security middleware
 app.use(helmet());
-
-// CORS configuration
-app.use(cors({
-  origin: config.corsOrigin,
-  credentials: true
-}));
-
-// Body parsing
+app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Request logging in development
-if (config.nodeEnv === 'development') {
-  app.use((req, res, next) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
-    next();
-  });
-}
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
-
-// API Routes
 app.use('/api', apiRoutes);
 
-// Error handling
 app.use(notFound);
 app.use(errorHandler);
 
-// Start server
-const PORT = config.port;
-app.listen(PORT, () => {
-  console.log(`
-╔════════════════════════════════════════════════════╗
-║      🎰 SORTEANDO WEAS - API SERVER 🎰             ║
-╠════════════════════════════════════════════════════╣
-║  🌐 URL: http://localhost:${PORT}                       ║
-║  📁 Environment: ${config.nodeEnv.padEnd(25)}      ║
-║  💳 MercadoPago: ${config.mercadopago.accessToken ? 'Configured' : 'Not configured'}                ║
-╠════════════════════════════════════════════════════╣
-║  API Endpoints:                                    ║
-║  • GET  /api/raffles                               ║
-║  • GET  /api/categories                            ║
-║  • GET  /api/stats                                 ║
-║  • POST /api/payments/create-preference            ║
-╚════════════════════════════════════════════════════╝
-  `);
+function safeLog(...args) {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(...args);
+  }
+}
+
+process.on('unhandledRejection', (err) => {
+  safeLog('UNHANDLED REJECTION!', err);
+  process.exit(1);
 });
 
-module.exports = app;
+(async () => {
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
+
+    const PORT = process.env.PORT;
+    if (!PORT) {
+      throw new Error('PORT is required in the process environment');
+    }
+    app.listen(PORT, () => {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`Server running on port ${PORT}`);
+      }
+    });
+  } catch (err) {
+    safeLog('Failed to start server:', err);
+    process.exit(1);
+  }
+})();

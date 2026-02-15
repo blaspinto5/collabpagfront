@@ -1,41 +1,24 @@
-/**
- * API Configuration
- * Base URL and fetch utilities for the API
- */
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+if (!API_BASE_URL) {
+  throw new Error('VITE_API_URL must be defined');
+}
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
-
-/**
- * Custom fetch wrapper with error handling
- */
-const apiFetch = async (endpoint, options = {}) => {
+export const apiFetch = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
-  
-  const defaultHeaders = {
-    'Content-Type': 'application/json',
-  };
+  const defaultHeaders = { 'Content-Type': 'application/json' };
+  const config = { ...options, headers: { ...defaultHeaders, ...options.headers } };
 
-  const config = {
-    ...options,
-    headers: {
-      ...defaultHeaders,
-      ...options.headers,
-    },
-  };
+  const response = await fetch(url, config);
 
-  try {
-    const response = await fetch(url, config);
-    
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+  if (!response.ok) {
+    let errorData = {};
+    try {
+      errorData = await response.json();
+    } catch {
+      // ignore
     }
-    
-    return await response.json();
-  } catch (error) {
-    console.error(`API Error [${endpoint}]:`, error);
-    throw error;
+    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
   }
-};
 
-export { API_BASE_URL, apiFetch };
+  return response.json();
+};
