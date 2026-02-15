@@ -46,7 +46,7 @@ const RaffleDetailPage = () => {
         <div className="max-w-3xl mx-auto text-center">
           <AlertTriangle size={64} className="text-red-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-white mb-2">Sorteo no encontrado</h1>
-          <p className="text-slate-400 mb-6">{error || 'El sorteo que buscas no existe o ya no está disponible.'}</p>
+          <p className="text-slate-400 mb-6">{ 'El sorteo que buscas no existe o ya no está disponible.'}</p>
           <Link to="/sorteos" className="px-7 py-3.5 rounded-xl font-semibold transition-all bg-gradient-to-r from-gold to-amber-600 text-slate-900 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30 inline-flex items-center gap-2">
             <ArrowLeft size={18} />
             Ver todos los sorteos
