@@ -26,7 +26,7 @@ export const raffleService = {
    * Get all available categories
    */
   getCategories: async () => {
-    return apiFetch('/categories');
+    return apiFetch('/raffles/categories');
   },
 
   /**
