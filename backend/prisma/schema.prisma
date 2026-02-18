@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum SorteoStatus {
+  ACTIVE
+  CLOSED
+  CANCELLED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  FAILED
+}
+
+enum TicketStatus {
+  AVAILABLE
+  ASSIGNED
+  USED
+}
+
+enum PaymentProvider {
+  MERCADOPAGO
+  OTHER
+}
+
+model Sorteo {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?  @db.Text
+  prize       String
+  prizeValue  Decimal? @db.Decimal(12, 2)
+  image       String?
+  ticketPrice Decimal  @db.Decimal(12, 2)
+
+  totalTickets Int
+  ticketsSold  Int @default(0)
+
+  drawDate DateTime?
+  endDate  DateTime?
+  status   SorteoStatus @default(ACTIVE)
+  category String?
+  winners  Int          @default(1)
+
+  tickets  Ticket[]
+  ordenes  OrdenCompra[]
+  tarjetas TarjetaIlustracion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([category])
+}
+
+model TarjetaIlustracion {
+  id        Int      @id @default(autoincrement())
+  title     String
+  image     String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sorteoId  Int
+  sorteo    Sorteo   @relation(fields: [sorteoId], references: [id], onDelete: Cascade)
+
+  tickets Ticket[]
+
+  @@index([sorteoId])
+}
+
+model OrdenCompra {
+  id                Int     @id @default(autoincrement())
+  orderNumber       Int?    @unique
+  preferenceId      String? @unique
+  providerPaymentId String? @unique
+
+  sorteoId   Int
+  raffleName String
+  buyerName  String
+  buyerEmail String
+  buyerPhone String?
+
+  ticketCount Int
+  ticketPrice Decimal @db.Decimal(12, 2)
+  total       Decimal @db.Decimal(12, 2)
+
+  status          OrderStatus      @default(PENDING)
+  paymentProvider PaymentProvider?
+  ticketNumbers   Json?
+
+  createdAt   DateTime  @default(now())
+  confirmedAt DateTime?
+
+  sorteo  Sorteo   @relation(fields: [sorteoId], references: [id], onDelete: Cascade)
+  tickets Ticket[]
+
+  @@index([sorteoId])
+  @@index([status])
+  @@index([buyerEmail])
+}
+
+model Ticket {
+  id           Int          @id @default(autoincrement())
+  sorteoId     Int
+  tarjetaId    Int
+  ordenId      Int?
+  ticketNumber Int
+  status       TicketStatus @default(ASSIGNED)
+  createdAt    DateTime     @default(now())
+
+  sorteo  Sorteo             @relation(fields: [sorteoId], references: [id], onDelete: Cascade)
+  orden   OrdenCompra?       @relation(fields: [ordenId], references: [id], onDelete: SetNull)
+  tarjeta TarjetaIlustracion @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
+
+  @@unique([sorteoId, ticketNumber])
+  @@index([tarjetaId])
+  @@index([sorteoId])
+}

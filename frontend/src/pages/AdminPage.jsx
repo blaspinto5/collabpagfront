@@ -6,6 +6,7 @@
 import { useState } from 'react';
 import { StatsDashboard, TableRowSkeleton } from '../components';
 import { usePurchases, useRaffles } from '../hooks';
+import { purchaseStatusLabel, raffleStatusLabel } from '../utils/status';
 import { 
   LayoutDashboard, 
   Ticket, 
@@ -40,20 +41,20 @@ const AdminPage = () => {
     });
   };
 
-  const getStatusBadge = (status) => {
-    const styles = {
-      pending: 'bg-yellow-500/20 text-yellow-400',
-      confirmed: 'bg-green-500/20 text-green-400',
-      cancelled: 'bg-red-500/20 text-red-400'
-    };
-    const labels = {
-      pending: 'Pendiente',
-      confirmed: 'Confirmado',
-      cancelled: 'Cancelado'
-    };
+  const getPurchaseStatusBadge = (status) => {
+    const { cls, label } = purchaseStatusLabel(status);
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${styles[status] || styles.pending}`}>
-        {labels[status] || status}
+      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${cls}`}>
+        {label}
+      </span>
+    );
+  };
+
+  const getRaffleStatusBadge = (status) => {
+    const { cls, label } = raffleStatusLabel(status);
+    return (
+      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${cls}`}>
+        {label}
       </span>
     );
   };
@@ -149,7 +150,7 @@ const AdminPage = () => {
                         <td className="px-4 py-3 text-slate-300">{purchase.raffleName}</td>
                         <td className="px-4 py-3 text-cyan font-semibold">{purchase.ticketCount}</td>
                         <td className="px-4 py-3 text-gold font-semibold">{formatPrice(purchase.total)}</td>
-                        <td className="px-4 py-3">{getStatusBadge(purchase.status)}</td>
+                        <td className="px-4 py-3">{getPurchaseStatusBadge(purchase.status)}</td>
                         <td className="px-4 py-3 text-slate-400 text-sm">{formatDate(purchase.createdAt)}</td>
                         <td className="px-4 py-3">
                           <div className="flex gap-2">
@@ -218,7 +219,7 @@ const AdminPage = () => {
                         <td className="px-4 py-3 text-cyan font-semibold">{formatPrice(raffle.ticketPrice)}</td>
                         <td className="px-4 py-3 text-gold font-semibold">{raffle.ticketsSold}</td>
                         <td className="px-4 py-3 text-slate-300">{raffle.totalTickets}</td>
-                        <td className="px-4 py-3">{getStatusBadge(raffle.status)}</td>
+                        <td className="px-4 py-3">{getRaffleStatusBadge(raffle.status)}</td>
                         <td className="px-4 py-3 text-slate-400 text-sm">{formatDate(raffle.endDate)}</td>
                       </tr>
                     ))

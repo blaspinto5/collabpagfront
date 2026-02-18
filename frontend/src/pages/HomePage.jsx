@@ -5,23 +5,29 @@
  */
 
 import { useRaffles } from '../hooks';
-import { HeroCarousel, StatsSection, HowItWorks } from '../components/sections';
-
+import { HeroCarousel, StatsSection, HowItWorks, BackendRafflesCarousel } from '../components/sections';
+import AboutSection from "../components/sections/AboutSection";
 const HomePage = () => {
   const { raffles, loading, error } = useRaffles({ status: 'active' });
 
-  return (
-    <>
-      {/* Premium Carousel - First Section */}
-      <HeroCarousel raffles={raffles} loading={loading} />
+return (
+  <>
+    {/* About Section - Primera sección */}
+    <AboutSection />
 
-      {/* Stats Section */}
-      <StatsSection />
+    {/* Premium Carousel */}
+    <HeroCarousel raffles={raffles} loading={loading} error={error} />
 
-      {/* How It Works */}
-      <HowItWorks />
-    </>
-  );
+    {/* Backend-sourced carousel */}
+    <BackendRafflesCarousel raffles={raffles} loading={loading} error={error} />
+
+    {/* Stats Section */}
+    <StatsSection />
+
+    {/* How It Works */}
+    <HowItWorks />
+  </>
+);
 };
 
 export default HomePage;

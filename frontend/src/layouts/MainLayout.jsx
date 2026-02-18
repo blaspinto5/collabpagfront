@@ -135,7 +135,23 @@ const MainLayout = () => {
         <div className="absolute -top-40 -left-40 w-80 h-80 bg-gold/5 rounded-full blur-[100px] animate-[float_8s_ease-in-out_infinite]" />
         <div className="absolute top-1/3 -right-20 w-60 h-60 bg-cyan/5 rounded-full blur-[80px] animate-[float_10s_ease-in-out_infinite_2s]" />
         <div className="absolute -bottom-20 left-1/3 w-72 h-72 bg-gold/5 rounded-full blur-[90px] animate-[float_9s_ease-in-out_infinite_1s]" />
-        
+        {/* Logo Watermark Global */}
+<img
+  src="/logo.png"
+  alt=""
+  className="
+    absolute
+    left-1/2
+    top-1/2
+    -translate-x-1/2
+    -translate-y-1/2
+    w-[1200px]
+    opacity-[0.33]
+    select-none
+    pointer-events-none
+  "
+/>
+
         {/* Animated Grid */}
         <AnimatedGrid />
         

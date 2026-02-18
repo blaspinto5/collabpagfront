@@ -6,6 +6,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useRaffle } from '../hooks';
 import { PurchaseForm, PageLoader } from '../components';
+import HeroCarousel from '../components/sections/HeroCarousel';
 import { 
   ArrowLeft, 
   Trophy, 
@@ -179,6 +180,10 @@ const RaffleDetailPage = () => {
               )}
             </div>
           </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto mt-12">
+          <HeroCarousel />
         </div>
       </div>
     </div>

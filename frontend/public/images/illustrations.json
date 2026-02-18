@@ -1,0 +1,50 @@
+[
+  {
+    "image": "img1.png",
+    "raffleId": 1,
+    "number": 1,
+    "displayNumber": "#01"
+  },
+  {
+    "image": "img2.png",
+    "raffleId": 2,
+    "number": 2,
+    "displayNumber": "#02"
+  },
+  {
+    "image": "img3.png",
+    "raffleId": 3,
+    "number": 3,
+    "displayNumber": "#03"
+  },
+  {
+    "image": "img4.png",
+    "raffleId": 4,
+    "number": 4,
+    "displayNumber": "#04"
+  },
+  {
+    "image": "img5.png",
+    "raffleId": 5,
+    "number": 5,
+    "displayNumber": "#05"
+  },
+  {
+    "image": "img6.png",
+    "raffleId": 6,
+    "number": 6,
+    "displayNumber": "#06"
+  },
+  {
+    "image": "img7.png",
+    "raffleId": 1,
+    "number": 7,
+    "displayNumber": "#07"
+  },
+  {
+    "image": "img8.png",
+    "raffleId": 2,
+    "number": 8,
+    "displayNumber": "#08"
+  }
+]

@@ -42,7 +42,8 @@ const create = async (req, res, next) => {
     const newRaffle = await raffleService.createRaffle(req.body);
     res.status(201).json(newRaffle);
   } catch (error) {
-    next(error);
+    const status = error.statusCode || 500;
+    return res.status(status).json({ error: error.message });
   }
 };
 

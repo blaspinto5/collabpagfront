@@ -18,6 +18,8 @@ const config = {
     accessToken: process.env.MP_ACCESS_TOKEN || '',
     sandbox: process.env.MP_SANDBOX === 'true'
   },
+  // Payments feature flag (disable MercadoPago in dev)
+  paymentsEnabled: process.env.PAYMENTS_ENABLED === 'true',
   
   // URLs
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',

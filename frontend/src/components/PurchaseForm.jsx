@@ -6,6 +6,8 @@
 import { useState } from 'react';
 import { Minus, Plus, User, Mail, Phone, CreditCard, Loader2 } from 'lucide-react';
 import { paymentService } from '../services';
+import ordersService from '../services/ordersService';
+import cardsService from '../services/cardsService';
 
 const PurchaseForm = ({ raffle, onSuccess }) => {
   const [ticketCount, setTicketCount] = useState(1);
@@ -47,6 +49,8 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
     }).format(price);
   };
 
+  const CHECKOUT_MODE = import.meta.env.VITE_CHECKOUT_MODE || 'mp';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -60,15 +64,36 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
       });
 
       // Redirect to MercadoPago
-      if (response.initPoint) {
-        window.location.href = response.initPoint;
-      } else if (response.sandboxInitPoint) {
-        window.location.href = response.sandboxInitPoint;
+      if (CHECKOUT_MODE === 'dev') {
+        const cards = await cardsService.listByRaffle(raffle.id, 1);
+        if (!Array.isArray(cards) || cards.length === 0) {
+          throw new Error('No hay tarjetas disponibles para este sorteo (modo dev).');
+        }
+        const tarjetaId = cards[0].id;
+        const payload = {
+          sorteoId: raffle.id,
+          tarjetaId,
+          ticketCount,
+          buyerName: formData.buyerName,
+          buyerEmail: formData.buyerEmail,
+          buyerPhone: formData.buyerPhone || ''
+        };
+        const devResp = await ordersService.devCheckout(payload);
+        onSuccess?.(devResp);
+      } else {
+        if (response.initPoint) {
+          window.location.href = response.initPoint;
+        } else if (response.sandboxInitPoint) {
+          window.location.href = response.sandboxInitPoint;
+        }
+        onSuccess?.(response);
       }
-
-      onSuccess?.(response);
     } catch (err) {
-      setError(err.message);
+      if (err && (err.status === 503 || /deshabilit/i.test(String(err.message || '')))) {
+        setError('Los pagos están deshabilitados en este entorno. Puedes usar el modo "dev" (VITE_CHECKOUT_MODE=dev).');
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -191,7 +216,7 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
         disabled={loading || remainingTickets === 0}
         className="w-full px-7 py-4 rounded-xl font-semibold transition-all bg-gradient-to-r from-gold to-amber-600 text-slate-900 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold/30 flex items-center justify-center gap-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? (
+            {loading ? (
           <>
             <Loader2 size={20} className="animate-spin" />
             Procesando...
@@ -199,7 +224,7 @@ const PurchaseForm = ({ raffle, onSuccess }) => {
         ) : (
           <>
             <CreditCard size={20} />
-            Pagar con MercadoPago
+                {CHECKOUT_MODE === 'dev' ? 'Comprar (modo dev)' : 'Pagar con MercadoPago'}
           </>
         )}
       </button>

@@ -42,6 +42,9 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Serve public static assets (cards, etc.) at root: http://localhost:PORT/<file>
+app.use(express.static(path.join(__dirname, 'public')));
+
 // API Routes
 app.use('/api', apiRoutes);
 

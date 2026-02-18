@@ -37,13 +37,26 @@ const createPaymentPreference = async (data) => {
   }
 
   const total = raffle.ticketPrice * ticketCount;
+  // Dev/feature-flag: disable payments when configured so
+  if (config.paymentsEnabled === false) {
+    const err = new Error('Pagos deshabilitados en este entorno');
+    err.statusCode = 503;
+    throw err;
+  }
+
+  // Ensure MercadoPago configured and client is initialized
+  if (!config.mercadopago.accessToken || !client) {
+    const err = new Error('MercadoPago no configurado');
+    err.statusCode = 503;
+    throw err;
+  }
 
   // Create MercadoPago preference
   const preference = new Preference(client);
   const preferenceData = {
     items: [{
       title: `${ticketCount} boleto(s) - ${raffle.title}`,
-      unit_price: raffle.ticketPrice,
+      unit_price: Number(raffle.ticketPrice),
       quantity: ticketCount,
       currency_id: 'CLP'
     }],
@@ -61,19 +74,38 @@ const createPaymentPreference = async (data) => {
     external_reference: `raffle_${raffleId}_${Date.now()}`
   };
 
-  const response = await preference.create({ body: preferenceData });
+  let response;
+  try {
+    response = await preference.create({ body: preferenceData });
+  } catch (e) {
+    // Map MercadoPago unauthorized to 502
+    const msg = String(e?.message || '');
+    if (msg.toUpperCase().includes('UNAUTHORIZED') || e?.status === 401 || e?.statusCode === 401) {
+      const err = new Error('MercadoPago UNAUTHORIZED: revisa MP_ACCESS_TOKEN');
+      err.statusCode = 502;
+      throw err;
+    }
+    // rethrow original error otherwise
+    throw e;
+  }
 
-  // Save pending purchase
-  const purchase = await purchaseService.createPurchase({
+  // Save pending purchase (compatibility with purchaseService implementations)
+  const createFn = purchaseService.createPurchase || purchaseService.create;
+  if (!createFn) {
+    const err = new Error('Purchase creation method not found');
+    err.statusCode = 500;
+    throw err;
+  }
+  const purchase = await createFn({
     preferenceId: response.id,
-    raffleId: parseInt(raffleId),
+    raffleId: Number(raffleId),
     raffleName: raffle.title,
     buyerName,
     buyerEmail,
     buyerPhone: buyerPhone || '',
-    ticketCount: parseInt(ticketCount),
-    ticketPrice: raffle.ticketPrice,
-    total
+    ticketCount: Number(ticketCount),
+    ticketPrice: Number(raffle.ticketPrice),
+    total: Number(total)
   });
 
   return {

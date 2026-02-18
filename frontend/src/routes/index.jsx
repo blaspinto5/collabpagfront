@@ -16,6 +16,8 @@ import {
   NotFoundPage
 } from '../pages';
 
+import IllustrationsPage from '../pages/IllustrationsPage';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -32,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: 'sorteo/:id',
         element: <RaffleDetailPage />
+      },
+      {
+        path: 'ilustraciones',   // 👈 AQUÍ
+        element: <IllustrationsPage />
       },
       {
         path: 'admin',

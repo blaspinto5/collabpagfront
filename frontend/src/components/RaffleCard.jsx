@@ -8,12 +8,16 @@ import { Link } from 'react-router-dom';
 import { Ticket, Clock, Trophy, ChevronRight, Flame } from 'lucide-react';
 
 // Formatters
-const formatDate = (dateString) => 
-  new Date(dateString).toLocaleDateString('es-CL', {
+const formatDate = (dateString) => {
+  if (!dateString) return 'Fecha no disponible';
+  const d = new Date(dateString);
+  if (Number.isNaN(d.getTime())) return 'Fecha inválida';
+  return d.toLocaleDateString('es-CL', {
     day: 'numeric',
     month: 'short',
     year: 'numeric'
   });
+};
 
 const priceFormatter = new Intl.NumberFormat('es-CL', {
   style: 'currency',

@@ -88,5 +88,34 @@
     "status": "active",
     "category": "Tecnologia",
     "createdAt": 1704499200000
+  },
+  {
+    "id": 7,
+    "title": "R1",
+    "description": "",
+    "prize": "X",
+    "prizeValue": 0,
+    "image": "https://via.placeholder.com/800x600?text=Premio",
+    "ticketPrice": 1,
+    "totalTickets": 100,
+    "ticketsSold": 0,
+    "status": "active",
+    "category": "A",
+    "winners": 1,
+    "createdAt": 1771381785784
+  },
+  {
+    "id": 8,
+    "title": "R_BAD",
+    "description": "",
+    "prizeValue": 0,
+    "image": "https://via.placeholder.com/800x600?text=Premio",
+    "ticketPrice": null,
+    "totalTickets": null,
+    "ticketsSold": 0,
+    "status": "active",
+    "category": "otros",
+    "winners": 1,
+    "createdAt": 1771381834288
   }
 ]

@@ -4,12 +4,13 @@
  */
 
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Ticket, LayoutDashboard } from 'lucide-react';
+import { Menu, X, Ticket, LayoutDashboard, Image } from 'lucide-react';
 import { useState, useCallback } from 'react';
 
 const navLinks = [
   { path: '/', label: 'Inicio' },
   { path: '/sorteos', label: 'Sorteos', icon: Ticket },
+  { path: '/ilustraciones', label: 'Ilustraciones', icon: Image },
   { path: '/admin', label: 'Admin', icon: LayoutDashboard },
 ];
 
@@ -17,17 +18,26 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  const isActive = useCallback((path) => location.pathname === path, [location.pathname]);
+  const isActive = useCallback(
+    (path) => location.pathname === path,
+    [location.pathname]
+  );
+
   const toggleMenu = useCallback(() => setIsOpen(prev => !prev), []);
   const closeMenu = useCallback(() => setIsOpen(false), []);
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-[#0f172a]/90 backdrop-blur-xl border-b border-white/5">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="h-20 flex items-center justify-between">
+        <div className="h-24 flex items-center justify-between">
+
           {/* Logo */}
           <Link to="/" className="flex items-center gap-4">
-            <img src="/logo.png" alt="Logo" className="h-14 w-auto object-contain" />
+            <img 
+              src="/logo.png" 
+              alt="Logo" 
+              className="h-16 md:h-18 lg:h-20 w-auto object-contain transition-transform duration-300 hover:scale-105" 
+            />
             <span className="text-gold font-bold text-2xl hidden sm:block tracking-tight">
               Sorteando Weas
             </span>

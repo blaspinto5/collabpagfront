@@ -1,9 +1,10 @@
 /**
  * HowItWorks Section
- * Clean steps design without redundant overlays
+ * Premium animated version
  */
 
 import { memo } from 'react';
+import { motion } from 'framer-motion';
 import { Ticket, CreditCard, Trophy } from 'lucide-react';
 
 const steps = [
@@ -18,7 +19,7 @@ const steps = [
     step: 2,
     icon: CreditCard,
     title: 'Compra tus Boletos',
-    description: 'Selecciona la cantidad de boletos y paga de forma segura con MercadoPago.',
+    description: 'Selecciona la cantidad de boletos y paga de forma segura.',
     color: 'from-cyan to-blue-500'
   },
   {
@@ -30,29 +31,63 @@ const steps = [
   }
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0 }
+};
+
 const HowItWorks = () => {
   return (
-    <section className="py-24 md:py-32">
+    <section className="py-24 md:py-32 relative z-10">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Section Header */}
-        <div className="text-center mb-16 md:mb-20">
+
+        {/* Header Animado */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16 md:mb-20"
+        >
           <span className="inline-block px-5 py-2 rounded-full bg-cyan/10 border border-cyan/20 text-cyan text-xs font-bold uppercase tracking-widest mb-6">
             Proceso Simple
           </span>
+
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
             ¿Cómo Funciona?
           </h2>
+
           <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto">
             Participar es muy fácil, solo sigue estos simples pasos
           </p>
-        </div>
+        </motion.div>
 
-        {/* Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+        {/* Steps Animados */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10"
+        >
           {steps.map((item, index) => (
-            <StepCard key={item.step} item={item} isLast={index === steps.length - 1} />
+            <StepCard
+              key={item.step}
+              item={item}
+              isLast={index === steps.length - 1}
+            />
           ))}
-        </div>
+        </motion.div>
+
       </div>
     </section>
   );
@@ -60,32 +95,84 @@ const HowItWorks = () => {
 
 const StepCard = memo(({ item, isLast }) => {
   const Icon = item.icon;
-  
+
   return (
-    <div className="relative group">
-      {/* Connector Line */}
+    <motion.div
+      variants={itemVariants}
+      transition={{ duration: 0.6 }}
+      className="relative group"
+    >
+
+      {/* Línea Conectora */}
       {!isLast && (
         <div className="hidden md:block absolute top-14 left-[calc(50%+50px)] w-[calc(100%-50px)] h-px bg-gradient-to-r from-white/20 to-transparent" />
       )}
-      
+
       {/* Card */}
-      <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-3xl p-10 text-center h-full transition-all duration-300 hover:border-gold/30 hover:-translate-y-1">
-        {/* Icon */}
-        <div className={`relative w-24 h-24 rounded-2xl bg-gradient-to-br ${item.color} mx-auto mb-8 flex items-center justify-center group-hover:scale-105 transition-transform shadow-2xl`}>
+      <div className="
+        bg-primary-light/60 
+        backdrop-blur-xl 
+        border border-white/10 
+        rounded-3xl 
+        p-10 
+        text-center 
+        h-full 
+        transition-all 
+        duration-300 
+        hover:border-gold/30 
+        hover:-translate-y-1 
+        hover:shadow-[0_0_40px_rgba(255,215,0,0.15)]
+      ">
+
+        {/* Icon Box */}
+        <div className={`
+          relative 
+          w-24 
+          h-24 
+          rounded-2xl 
+          bg-gradient-to-br ${item.color} 
+          mx-auto 
+          mb-8 
+          flex 
+          items-center 
+          justify-center 
+          group-hover:scale-105 
+          transition-transform 
+          shadow-2xl
+        `}>
           <Icon size={40} className="text-primary-dark" />
-          <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-slate-900 border-2 border-white/20 flex items-center justify-center text-white font-bold text-base">
+
+          <span className="
+            absolute 
+            -top-2 
+            -right-2 
+            w-8 
+            h-8 
+            rounded-full 
+            bg-slate-900 
+            border-2 
+            border-white/20 
+            flex 
+            items-center 
+            justify-center 
+            text-white 
+            font-bold 
+            text-base
+          ">
             {item.step}
           </span>
         </div>
-        
+
         <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-gold transition-colors">
           {item.title}
         </h3>
+
         <p className="text-slate-400 text-base leading-relaxed">
           {item.description}
         </p>
+
       </div>
-    </div>
+    </motion.div>
   );
 });
 

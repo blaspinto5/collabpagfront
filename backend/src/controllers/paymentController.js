@@ -32,7 +32,8 @@ const createPreference = async (req, res, next) => {
 
     res.json(result);
   } catch (error) {
-    next(error);
+    const status = error && error.statusCode ? error.statusCode : 500;
+    return res.status(status).json({ error: error.message });
   }
 };
 
@@ -46,7 +47,8 @@ const webhook = async (req, res, next) => {
     res.status(200).json(result);
   } catch (error) {
     console.error('Webhook error:', error);
-    res.status(500).json({ error: 'Webhook processing failed' });
+    const status = error && error.statusCode ? error.statusCode : 500;
+    return res.status(status).json({ error: error.message || 'Webhook processing failed' });
   }
 };
 

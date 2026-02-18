@@ -1,125 +1,169 @@
 /**
- * Raffle Service
- * Business logic for raffle operations
+ * Raffle Service (Prisma-backed)
  * @module services/raffleService
  */
 
-const Raffle = require('../models/Raffle');
+const prisma = require('../db/prisma');
 
-/**
- * @typedef {Object} RaffleFilters
- * @property {string} [category] - Filter by category
- * @property {string} [status] - Filter by status
- */
-
-/**
- * Get all raffles with optional filters
- * @param {RaffleFilters} filters
- * @returns {Promise<Array>}
- */
 const getAllRaffles = async (filters = {}) => {
   try {
-    return Raffle.getAll(filters);
+    const where = {};
+    if (filters.category && filters.category !== 'all') where.category = filters.category;
+    if (typeof filters.status !== 'undefined') {
+      if (filters.status !== 'all') where.status = filters.status.toUpperCase();
+    } else {
+      // default to active
+      where.status = 'ACTIVE';
+    }
+
+    const raffles = await prisma.sorteo.findMany({
+      where,
+      orderBy: { drawDate: 'asc' }
+    });
+
+    // serialize decimals to numbers
+    return raffles.map(serializeRaffle);
   } catch (error) {
     throw new Error(`Failed to fetch raffles: ${error.message}`);
   }
 };
 
-/**
- * Get single raffle by ID
- * @param {number} id
- * @returns {Promise<Object|null>}
- */
 const getRaffleById = async (id) => {
+  const nid = Number(id);
+  if (isNaN(nid)) {
+    const err = new Error('Parámetro inválido');
+    err.statusCode = 400;
+    throw err;
+  }
   try {
-    const raffle = Raffle.getById(id);
+    const raffle = await prisma.sorteo.findUnique({ where: { id: nid } });
     if (!raffle) {
-      const error = new Error('Raffle not found');
-      error.statusCode = 404;
-      throw error;
+      const err = new Error('Sorteo no encontrado');
+      err.statusCode = 404;
+      throw err;
     }
-    return raffle;
+    return serializeRaffle(raffle);
   } catch (error) {
     throw error;
   }
 };
 
-/**
- * Create new raffle
- * @param {Object} data
- * @returns {Promise<Object>}
- */
 const createRaffle = async (data) => {
   try {
-    return Raffle.create(data);
+    // validate required fields
+    const missing = [];
+    if (!data || !data.title) missing.push('title');
+    if (!data || (typeof data.prize === 'undefined' || data.prize === null)) missing.push('prize');
+    if (!data || (typeof data.ticketPrice === 'undefined' || data.ticketPrice === null)) missing.push('ticketPrice');
+    if (!data || (typeof data.totalTickets === 'undefined' || data.totalTickets === null)) missing.push('totalTickets');
+    if (missing.length) {
+      const err = new Error(`Faltan campos requeridos: ${missing.join(', ')}`);
+      err.statusCode = 400;
+      throw err;
+    }
+    const payload = {
+      title: data.title,
+      description: data.description || null,
+      prize: data.prize,
+      prizeValue: typeof data.prizeValue !== 'undefined' ? String(data.prizeValue) : null,
+      image: data.image || null,
+      ticketPrice: String(data.ticketPrice),
+      totalTickets: Number(data.totalTickets),
+      ticketsSold: typeof data.ticketsSold !== 'undefined' ? Number(data.ticketsSold) : 0,
+      drawDate: data.drawDate ? new Date(data.drawDate) : null,
+      endDate: data.endDate ? new Date(data.endDate) : null,
+      status: data.status ? data.status.toUpperCase() : undefined,
+      category: data.category || null,
+      winners: typeof data.winners !== 'undefined' ? Number(data.winners) : 1
+    };
+
+    const created = await prisma.sorteo.create({ data: payload });
+    return serializeRaffle(created);
   } catch (error) {
-    throw new Error(`Failed to create raffle: ${error.message}`);
+      // Preserve existing status codes (e.g. validation errors) when rethrowing
+      if (error && error.statusCode) throw error;
+      const err = new Error(`Failed to create raffle: ${error.message}`);
+      err.statusCode = 500;
+      throw err;
   }
 };
 
-/**
- * Update existing raffle
- * @param {number} id
- * @param {Object} data
- * @returns {Promise<Object>}
- */
-const updateRaffle = async (id, data) => {
+const updateRaffle = async (id, updates) => {
+  const nid = Number(id);
+  if (isNaN(nid)) {
+    const err = new Error('Parámetro inválido');
+    err.statusCode = 400;
+    throw err;
+  }
   try {
-    const raffle = Raffle.update(id, data);
-    if (!raffle) {
-      const error = new Error('Raffle not found');
-      error.statusCode = 404;
-      throw error;
-    }
-    return raffle;
+    const payload = { ...updates };
+    if (typeof updates.drawDate !== 'undefined') payload.drawDate = updates.drawDate ? new Date(updates.drawDate) : null;
+    if (typeof updates.endDate !== 'undefined') payload.endDate = updates.endDate ? new Date(updates.endDate) : null;
+    if (typeof updates.ticketPrice !== 'undefined') payload.ticketPrice = String(updates.ticketPrice);
+    if (typeof updates.prizeValue !== 'undefined') payload.prizeValue = String(updates.prizeValue);
+    if (typeof updates.status !== 'undefined') payload.status = updates.status ? updates.status.toUpperCase() : undefined;
+
+    const updated = await prisma.sorteo.update({ where: { id: nid }, data: payload });
+    return serializeRaffle(updated);
   } catch (error) {
+    if (error.code === 'P2025') {
+      const err = new Error('Sorteo no encontrado');
+      err.statusCode = 404;
+      throw err;
+    }
     throw error;
   }
 };
 
-/**
- * Delete raffle
- * @param {number} id
- * @returns {Promise<boolean>}
- */
 const deleteRaffle = async (id) => {
+  const nid = Number(id);
+  if (isNaN(nid)) {
+    const err = new Error('Parámetro inválido');
+    err.statusCode = 400;
+    throw err;
+  }
   try {
-    const deleted = Raffle.delete(id);
-    if (!deleted) {
-      const error = new Error('Raffle not found');
-      error.statusCode = 404;
-      throw error;
-    }
+    await prisma.sorteo.delete({ where: { id: nid } });
     return true;
   } catch (error) {
+    if (error.code === 'P2025') {
+      const err = new Error('Sorteo no encontrado');
+      err.statusCode = 404;
+      throw err;
+    }
     throw error;
   }
 };
 
-/**
- * Get all categories
- * @returns {Promise<Array>}
- */
 const getCategories = async () => {
-  return Raffle.getCategories();
+  const cats = await prisma.sorteo.findMany({
+    where: { category: { not: null } },
+    distinct: ['category'],
+    select: { category: true }
+  });
+  // map to legacy shape: { id, name, icon }
+  return cats.map(c => ({ id: c.category, name: c.category, icon: null }));
 };
 
-/**
- * Increment tickets sold for a raffle
- * @param {number} id
- * @param {number} count
- * @returns {Promise<Object>}
- */
 const incrementTicketsSold = async (id, count) => {
+  const nid = Number(id);
+  if (isNaN(nid)) {
+    const err = new Error('Parámetro inválido');
+    err.statusCode = 400;
+    throw err;
+  }
   try {
-    const raffle = Raffle.incrementTicketsSold(id, count);
-    if (!raffle) {
-      const error = new Error('Raffle not found');
-      error.statusCode = 404;
-      throw error;
-    }
-    return raffle;
+    const updated = await prisma.sorteo.update({
+      where: { id: nid },
+      data: { ticketsSold: { increment: Number(count) } }
+    });
+    return serializeRaffle(updated);
   } catch (error) {
+    if (error.code === 'P2025') {
+      const err = new Error('Sorteo no encontrado');
+      err.statusCode = 404;
+      throw err;
+    }
     throw error;
   }
 };
@@ -133,3 +177,14 @@ module.exports = {
   getCategories,
   incrementTicketsSold
 };
+
+function serializeRaffle(r) {
+  if (!r) return r;
+  const ticketPrice = r.ticketPrice != null ? Number(r.ticketPrice) : null;
+  const prizeValue = r.prizeValue != null ? Number(r.prizeValue) : null;
+  return {
+    ...r,
+    ticketPrice,
+    prizeValue
+  };
+}
