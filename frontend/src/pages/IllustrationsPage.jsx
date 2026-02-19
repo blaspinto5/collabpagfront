@@ -28,7 +28,7 @@ const IllustrationsPage = () => {
           {illustrations.map((item) => (
             <IllustrationCard
               key={item.id}
-              id={item.id}
+              number={item.id}
               image={item.image}
               price={ILLUSTRATION_PRICE}
             />
