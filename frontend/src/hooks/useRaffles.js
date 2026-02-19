@@ -41,8 +41,14 @@ export const useRaffle = (id) => {
   const [error, setError] = useState(null);
 
   const fetchRaffle = useCallback(async () => {
-    if (!id) return;
-    
+    // guard against undefined/null or the literal strings 'undefined'/'null'
+    if (!id || id === 'undefined' || id === 'null') {
+      setRaffle(null);
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
