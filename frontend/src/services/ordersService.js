@@ -4,6 +4,7 @@
  */
 
 import { apiFetch } from './api';
+import { ENDPOINTS } from './endpoints';
 
 export const ordersService = {
   /**
@@ -11,7 +12,7 @@ export const ordersService = {
    * payload: { sorteoId, tarjetaId, ticketCount, buyerName, buyerEmail, buyerPhone }
    */
   devCheckout: async (payload) => {
-    return apiFetch('/orders/dev-checkout', {
+    return apiFetch(ENDPOINTS.ORDERS_DEV_CHECKOUT, {
       method: 'POST',
       body: JSON.stringify(payload),
     });

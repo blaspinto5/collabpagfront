@@ -4,6 +4,7 @@
  */
 
 import { apiFetch } from './api';
+import { ENDPOINTS } from './endpoints';
 
 export const purchaseService = {
   /**
@@ -12,21 +13,21 @@ export const purchaseService = {
   getAll: async (filters = {}) => {
     const params = new URLSearchParams(filters);
     const queryString = params.toString() ? `?${params.toString()}` : '';
-    return apiFetch(`/purchases${queryString}`);
+    return apiFetch(`${ENDPOINTS.PURCHASES}${queryString}`);
   },
 
   /**
    * Get a single purchase by ID
    */
   getById: async (id) => {
-    return apiFetch(`/purchases/${id}`);
+    return apiFetch(`${ENDPOINTS.PURCHASES}/${id}`);
   },
 
   /**
    * Confirm a purchase (admin only)
    */
   confirm: async (id) => {
-    return apiFetch(`/purchases/${id}/confirm`, {
+    return apiFetch(`${ENDPOINTS.PURCHASES}/${id}/confirm`, {
       method: 'POST',
     });
   },
@@ -35,7 +36,7 @@ export const purchaseService = {
    * Get purchase statistics
    */
   getStats: async () => {
-    return apiFetch('/purchases/stats');
+    return apiFetch(`${ENDPOINTS.PURCHASES}/stats`);
   },
 };
 

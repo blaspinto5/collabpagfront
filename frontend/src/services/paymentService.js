@@ -4,13 +4,14 @@
  */
 
 import { apiFetch } from './api';
+import { ENDPOINTS } from './endpoints';
 
 export const paymentService = {
   /**
    * Create payment preference for ticket purchase
    */
   createPreference: async (purchaseData) => {
-    return apiFetch('/payments/create-preference', {
+    return apiFetch(ENDPOINTS.PAYMENT_CREATE_PREFERENCE, {
       method: 'POST',
       body: JSON.stringify(purchaseData),
     });

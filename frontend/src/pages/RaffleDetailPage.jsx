@@ -6,7 +6,10 @@
 import { useParams, Link } from 'react-router-dom';
 import { useRaffle } from '../hooks';
 import { PurchaseForm, PageLoader } from '../components';
-import HeroCarousel from '../components/sections/HeroCarousel';
+import { useEffect, useState } from 'react';
+import { cardsService } from '../services/cardsService';
+import { buildCardAssetUrl } from '../utils/assets';
+import { isActiveStatus } from '../services/normalizers/status';
 import { 
   ArrowLeft, 
   Trophy, 
@@ -16,6 +19,59 @@ import {
   CheckCircle,
   AlertTriangle 
 } from 'lucide-react';
+
+// Sección para mostrar las ilustraciones (cards) del sorteo actual
+const IllustrationsSection = ({ sorteoId }) => {
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    setError(null);
+
+    cardsService
+      .listByRaffle(sorteoId, 8)
+      .then((res) => {
+        // soporta ambos formatos: array o { data, meta }
+        const list = Array.isArray(res) ? res : (res?.data ?? []);
+        if (mounted) setCards(list);
+      })
+      .catch((err) => {
+        if (mounted) setError(err?.message || 'Error al cargar ilustraciones');
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => { mounted = false; };
+  }, [sorteoId]);
+
+  if (loading) return <div className="text-slate-400 py-8">Cargando ilustraciones...</div>;
+  if (error) return <div className="text-red-400 py-8">{error}</div>;
+  if (!cards || cards.length === 0) return <div className="text-slate-400 py-8">No hay ilustraciones para este sorteo</div>;
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {cards.map((card) => (
+        <div key={card.id} className="bg-primary-light/60 border border-white/10 rounded-2xl overflow-hidden">
+          <img
+            src={buildCardAssetUrl(card.image)}
+            alt={card.title}
+            className="w-full h-48 object-cover"
+          />
+          <div className="p-4">
+            <h3 className="text-lg font-semibold text-white mb-1">{card.title}</h3>
+            {card.metadata?.descripcion && (
+              <p className="text-slate-400 text-sm">{card.metadata.descripcion}</p>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const RaffleDetailPage = () => {
   const { id } = useParams();
@@ -90,7 +146,7 @@ const RaffleDetailPage = () => {
                 <span className="px-3 py-1 text-sm font-semibold rounded-full bg-gold text-primary-dark">
                   {raffle.category}
                 </span>
-                {isExpiringSoon && raffle.status === 'active' && (
+                {isExpiringSoon && isActiveStatus(raffle.status) && (
                   <span className="px-3 py-1 text-sm font-semibold rounded-full bg-red-500 text-white animate-pulse">
                     ¡Últimos días!
                   </span>
@@ -160,7 +216,7 @@ const RaffleDetailPage = () => {
           {/* Sidebar - Purchase Form */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
-              {raffle.status === 'active' && remainingTickets > 0 ? (
+              {isActiveStatus(raffle.status) && remainingTickets > 0 ? (
                 <PurchaseForm raffle={raffle} />
               ) : (
                 <div className="bg-primary-light/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 text-center">
@@ -182,8 +238,10 @@ const RaffleDetailPage = () => {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto mt-12">
-          <HeroCarousel />
+        {/* Ilustraciones del sorteo */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Ilustraciones</h2>
+          <IllustrationsSection sorteoId={raffle.id} />
         </div>
       </div>
     </div>

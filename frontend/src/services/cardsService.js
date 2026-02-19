@@ -4,6 +4,8 @@
  */
 
 import { apiFetch } from './api';
+import { ENDPOINTS } from './endpoints';
+import normalizeCardsResponse from './normalizers/cards';
 
 export const cardsService = {
   /**
@@ -14,13 +16,9 @@ export const cardsService = {
     if (sorteoId != null) params.set('sorteoId', String(sorteoId));
     if (limit != null) params.set('limit', String(limit));
 
-    const endpoint = `/cards?${params.toString()}`;
+    const endpoint = `${ENDPOINTS.CARDS}?${params.toString()}`;
     const res = await apiFetch(endpoint);
-
-    if (!res) return [];
-    if (Array.isArray(res)) return res;
-    if (res.data && Array.isArray(res.data)) return res.data;
-    return [];
+    return normalizeCardsResponse(res);
   },
 };
 
