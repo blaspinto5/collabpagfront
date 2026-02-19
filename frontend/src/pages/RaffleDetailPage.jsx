@@ -143,7 +143,7 @@ const RaffleDetailPage = () => {
                 alt={raffle.title}
                 className="w-full h-64 md:h-96 object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/80 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/80 via-transparent to-transparent pointer-events-none" />
               
               {/* Badges */}
               <div className="absolute top-4 left-4 flex gap-2">

@@ -20,6 +20,21 @@ export const cardsService = {
     const res = await apiFetch(endpoint);
     return normalizeCardsResponse(res);
   },
+  /**
+   * listAll - list cards (global) with pagination
+   * returns { cards: Array, meta: Object }
+   */
+  listAll: async (page = 1, limit = 32) => {
+    const params = new URLSearchParams();
+    if (page != null) params.set('page', String(page));
+    if (limit != null) params.set('limit', String(limit));
+
+    const endpoint = `${ENDPOINTS.CARDS}?${params.toString()}`;
+    const res = await apiFetch(endpoint);
+    const cards = normalizeCardsResponse(res);
+    const meta = res && res.meta ? res.meta : null;
+    return { cards, meta };
+  },
 };
 
 export default cardsService;

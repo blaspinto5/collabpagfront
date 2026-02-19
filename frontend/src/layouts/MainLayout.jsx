@@ -5,17 +5,18 @@
 
 import { Outlet } from 'react-router-dom';
 import { Navbar, Footer } from '../components';
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState, memo, useRef } from 'react';
 
 // Animated Grid Background with glowing squares
 const AnimatedGrid = memo(() => {
   const [glowingSquares, setGlowingSquares] = useState([]);
+  const glowIdRef = useRef(1);
   
   useEffect(() => {
     const createGlow = () => {
       // Create multiple squares at once
       const newSquares = Array.from({ length: 3 }, () => ({
-        id: Date.now() + Math.random(),
+        id: glowIdRef.current++,
         left: Math.random() * 100,
         top: Math.random() * 100,
         size: 50 + Math.random() * 50,
@@ -66,10 +67,11 @@ AnimatedGrid.displayName = 'AnimatedGrid';
 // Falling Coins Effect
 const FallingCoins = memo(() => {
   const [coins, setCoins] = useState([]);
+  const coinIdRef = useRef(1);
   
   useEffect(() => {
     const createCoin = () => {
-      const id = Date.now() + Math.random();
+      const id = coinIdRef.current++;
       const coin = {
         id,
         left: Math.random() * 100,

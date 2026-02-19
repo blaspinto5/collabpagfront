@@ -1,0 +1,5 @@
+[33md19cd92[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m chore(frontend): centralize endpoints + normalizers; remove old audit script
+[33m6408556[m chore(frontend): add audit:network script
+[33mc7673c3[m fix(raffleService): call /raffles/categories instead of /categories
+[33m846a30c[m chore: create pruebas branch and commit workspace changes
+[33md56700b[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m img

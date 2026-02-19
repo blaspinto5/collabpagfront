@@ -32,7 +32,7 @@ export const raffleService = {
    * Get all available categories
    */
   getCategories: async () => {
-    return apiFetch(ENDPOINTS.RAFFLES_CATEGORIES);
+    return apiFetch('/raffles/categories');
   },
 
   /**
