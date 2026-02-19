@@ -55,7 +55,11 @@ const IllustrationsSection = ({ sorteoId }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
       {cards.map((card) => (
-        <div key={card.id} className="bg-primary-light/60 border border-white/10 rounded-2xl overflow-hidden">
+        <Link
+          key={card.id}
+          to={`/sorteo/${card.sorteoId ?? sorteoId}`}
+          className="block bg-primary-light/60 border border-white/10 rounded-2xl overflow-hidden"
+        >
           <img
             src={buildCardAssetUrl(card.image)}
             alt={card.title}
@@ -67,7 +71,7 @@ const IllustrationsSection = ({ sorteoId }) => {
               <p className="text-slate-400 text-sm">{card.metadata.descripcion}</p>
             )}
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
